@@ -38,7 +38,7 @@ const app = express();
 app.use(cookieParser()); // To parse the incoming cookies
 const corsOptions = {
   credentials: true,
-  origin: true, // Add your frontend origin here (Don't add '/' at the end)
+  origin: "http://localhost:300", // Add your frontend origin here (Don't add '/' at the end)
 };
 app.use("*", cors(corsOptions)); // npm i cors
 // app.use(
