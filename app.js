@@ -38,8 +38,10 @@ const app = express();
 app.use(cookieParser()); // To parse the incoming cookies
 const corsOptions = {
   credentials: true,
-  origin: "http://localhost:3000", // Add your frontend origin here (Don't add '/' at the end)
-   method: ["OPTIONS", "GET", "PATCH", "DELETE", "POST", "PUT", "HEAD"]
+  // origin: true, // for public api
+  origin: ["http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end)
+  method: ["OPTIONS", "GET", "PATCH", "DELETE", "POST", "PUT", "HEAD"],
+  allowedHeaders:["X-CSRF-Token", "X-Requested-With", "Accept", "Accept-Version", "Content-Length", "Content-MD5", "Content-Type", "Date", "X-Api-Version","Authorization","Cookie","Access-Control-Allow-Credentials","Access-Control-Allow-Origin"]
 };
 app.use("*", cors(corsOptions)); // npm i cors
 // app.use(
