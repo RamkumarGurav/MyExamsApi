@@ -106,7 +106,7 @@ if (process.env.NODE_ENV === "development") {
 //--------------------------------------------------------
 //------------routers--------------------------------
 app.get("/", (req, res) => {
-  res.send("Welcome to MyExams Api");
+  res.send("Welcome to MyExams API");
 });
 
 app.use("/api/v1", userRouter);
