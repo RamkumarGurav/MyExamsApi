@@ -34,6 +34,7 @@ const createSendToken = (user, statusCode, req, res) => {
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ), //browser will delete this cookie after 90 days
     secure: false, //if secure is true then this cookie will be sent through only https connection (encrpted connect)
+    sameSite:'none',
     httpOnly: true, //if true this makes- this cookie can't be access or modified by the browser.or even browser cant delete this cookie//this makes the browser only store the cookie and send it along request every time a request made to the website server(where cookie originally created )
   };
 
