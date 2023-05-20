@@ -15,6 +15,7 @@ const productRouter = require("./routes/productRoutes");
 const packageRouter = require("./routes/packageRoutes");
 const orderRouter = require("./routes/orderRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
+const blogRouter = require("./routes/blogRoutes");
 
 const app = express();
 
@@ -105,7 +106,7 @@ if (process.env.NODE_ENV === "development") {
 //--------------------------------------------------------
 //------------routers--------------------------------
 app.get("/", (req, res) => {
-  res.send("Welcome to Blog Api");
+  res.send("Welcome to MyExams Api");
 });
 
 app.use("/api/v1", userRouter);
@@ -114,6 +115,7 @@ app.use("/api/v1", productRouter);
 app.use("/api/v1", orderRouter);
 app.use("/api/v1", paymentRouter);
 app.use("/api/v1", packageRouter);
+app.use("/api/v1", blogRouter);
 
 //-----HANDLING UNHANDLED ROUTES---------------------------
 app.use("*", (req, res, next) => {
