@@ -39,6 +39,7 @@ app.use(cookieParser()); // To parse the incoming cookies
 const corsOptions = {
   credentials: true,
   origin: "http://localhost:3000", // Add your frontend origin here (Don't add '/' at the end)
+   method: ["OPTIONS", "GET", "PATCH", "DELETE", "POST", "PUT", "HEAD"]
 };
 app.use("*", cors(corsOptions)); // npm i cors
 // app.use(
