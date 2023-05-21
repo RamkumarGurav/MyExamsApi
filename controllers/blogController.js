@@ -7,8 +7,8 @@ const Blog = require("../models/blogModel");
 
 //-------------Get All Procuts--------------------------------
 exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
-  const resultsPerPage = 10; //for pagination
-  const blogsCount = await Blog.countDocuments(); //total no. of products without any queries
+  const resultsPerPage = req.query.limit; //for pagination
+  const blogsCount = await Blog.countDocuments(); //total no. of Blogs without any queries
 
   let features = new APIFeatures(Blog.find(), req.query)
     .filter()
@@ -18,7 +18,7 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
 
   // const doc = await features.query.explain();//used for creating indexes
   let blogs = await features.query;
-  let filteredBlogsCount = blogs.length; //total no. of products after queries before pagination because we need to know how many total products are found before dividing them into pages
+  let filteredBlogsCount = blogs.length; //total no. of blogs after queries before pagination because we need to know how many total blogs are found before dividing them into pages
   features = new APIFeatures(Blog.find(), req.query)
     .filter()
     .search()
@@ -27,11 +27,12 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
     .paginate(resultsPerPage);
 
   blogs = await features.query;
+  const results = blogs.length;
 
   //SENDING RESPONSE
   res.status(200).json({
     status: "success",
-    results: blogs.length,
+    results,
     data: {
       blogs,
       blogsCount,
@@ -39,12 +40,15 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
       currentPage: Number(req.query.page),
       resultsPerPage: resultsPerPage,
       numberOfPages: Math.ceil(blogsCount / Number(resultsPerPage)), //calculateing total no. of pages
+      numberOfPagesQuery: Math.ceil(
+        filteredBlogsCount / Number(resultsPerPage)
+      ), //calculateing total no. of pages for query results
     },
   });
 });
 //--------------------------------------------------------
 
-//------------Get a Product---------------------------------
+//------------Get a blog---------------------------------
 exports.getBlog = catchAsyncErrors(async (req, res, next) => {
   const blog = await Blog.findById(req.params.blogId);
 
@@ -64,10 +68,11 @@ exports.getBlog = catchAsyncErrors(async (req, res, next) => {
 //--------------------------------------------------------
 
 //------------ADMINS ONLY---------------------------------
-//------------Create a Product-------------------------------
+//------------Create a blog-------------------------------
 exports.createBlog = catchAsyncErrors(async (req, res, next) => {
-  // req.body.user = req.user._id; //id of user/admin who will create this product
+  // req.body.user = req.user._id; //id of user/admin who will create this blog
 const formData=req.body
+formData.user=req.user._id
   const blog = await Blog.create(formData);
 
   res.status(201).json({
@@ -82,7 +87,7 @@ const formData=req.body
 
 //--------------------------------------------------------
 
-//------------Update a Product--------------------------------------
+//------------Update a blog--------------------------------------
 exports.updateBlog = catchAsyncErrors(async (req, res, next) => {
   const blog = await Blog.findByIdAndUpdate(req.params.blogId, req.body, {
     new: true, //it returns modified document rather than original
@@ -104,7 +109,7 @@ exports.updateBlog = catchAsyncErrors(async (req, res, next) => {
 });
 //--------------------------------------------------------
 
-//-------------Delete a Product----------------------------
+//-------------Delete a blog----------------------------
 exports.deleteBlog= catchAsyncErrors(async (req, res, next) => {
   let blog = await Blog.findById(req.params.blogId);
   if (!blog) {

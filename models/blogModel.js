@@ -17,22 +17,24 @@ const blogSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Please enter blogpost description"],
     },
-    author: {
-      type: Object,
-      default: {
-        name: "Ramkumar Gurav",
-        img: "/images/author/author1.jpg",
-        designation: "CEO and Founder",
-      },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
     },
-    img: {
+    authorName: {
       type: String,
-      default: "/images/img1.jpg",
+      required: [true, "Please enter blogpost author name"],
     },
-    publishedAt: {
-      type: Date,
-      default: Date.now(),
+    authorAvatar: {
+      type: String,
+      required: [true, "Please enter blogpost author avatar "],
     },
+    image: {
+      type: String,
+      default: "/defautlPost.jpg",
+    },
+
     type: {
       type: String,
       trim: true,
@@ -42,6 +44,14 @@ const blogSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: [true, "Please enter blogpost category"],
+    },
+    publishedAt: {
+      type: Date,
+      default: Date.now(),
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
     },
   },
   {
