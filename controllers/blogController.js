@@ -71,8 +71,10 @@ exports.getBlog = catchAsyncErrors(async (req, res, next) => {
 //------------Create a blog-------------------------------
 exports.createBlog = catchAsyncErrors(async (req, res, next) => {
   // req.body.user = req.user._id; //id of user/admin who will create this blog
-const formData=req.body
-formData.user=req.user._id
+  let formData = req.body;
+  formData.user = req.user._id;
+  formData.authorName = req.user.name;
+  formData.author = req.user.avatar;
   const blog = await Blog.create(formData);
 
   res.status(201).json({
@@ -110,7 +112,7 @@ exports.updateBlog = catchAsyncErrors(async (req, res, next) => {
 //--------------------------------------------------------
 
 //-------------Delete a blog----------------------------
-exports.deleteBlog= catchAsyncErrors(async (req, res, next) => {
+exports.deleteBlog = catchAsyncErrors(async (req, res, next) => {
   let blog = await Blog.findById(req.params.blogId);
   if (!blog) {
     //throwing error if similar wrong id is searched in url
