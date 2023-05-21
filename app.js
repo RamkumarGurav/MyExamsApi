@@ -38,7 +38,10 @@ const app = express();
 app.use(cookieParser()); // To parse the incoming cookies
 const corsOptions = {
   credentials: true,
-  origin: true, // Add your frontend origin here (Don't add '/' at the end)
+  // origin: true, // for public api
+  origin: ["https://my-exams-ramkumargurav.vercel.app","https://snextjs-h3ruppdy0-ramkumargurav.vercel.app","http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end)
+  methods: ["OPTIONS", "GET", "PATCH", "DELETE", "POST", "PUT", "HEAD"],
+  allowedHeaders:["X-CSRF-Token", "X-Requested-With", "Accept", "Accept-Version", "Content-Length", "Content-MD5", "Content-Type", "Date", "X-Api-Version","Authorization","Cookie","Access-Control-Allow-Credentials","Access-Control-Allow-Origin"]
 };
 app.use("*", cors(corsOptions)); // npm i cors
 // app.use(
@@ -106,7 +109,7 @@ if (process.env.NODE_ENV === "development") {
 //--------------------------------------------------------
 //------------routers--------------------------------
 app.get("/", (req, res) => {
-  res.send("Welcome to MyExams Api");
+  res.send("Welcome to MyExams API");
 });
 
 app.use("/api/v1", userRouter);

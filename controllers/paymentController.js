@@ -92,12 +92,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   // const order = await Order.create({
   //   shippingInfo,
   //   orderedItems,
-
-  //   paymentInfo,
-
-  //   // itemsPrice,
-  //   // taxPrice,
-  //   // shippingPrice,
+  //   paymentInfo: { sessionId: session.id, status: "completed" },
   //   totalPrice,
   //   paidAt: Date.now(),
   //   user: req.user._id,
