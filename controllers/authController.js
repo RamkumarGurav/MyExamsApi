@@ -34,6 +34,12 @@ const createSendToken = (user, statusCode, req, res) => {
     secure: false, //if secure is true then this cookie will be sent through only https connection (encrpted connect) where server and client should have https//usually this will be made true when both client and server debployed withh https
     sameSite: "none", //this is for cors ,this makes the communication bewteen different domains possible ,
     httpOnly: true, //this makes- this cookie can't be access or modified by the browser.or even browser cant delete this cookie//this makes the browser only store the cookie and send it along request every time a request made to the website server(where cookie originally created )
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ), //browser will delete this cookie after 90 days
+    secure: false, //if secure is true then this cookie will be sent through only https connection (encrpted connect)
+    sameSite:'none',
+    httpOnly: true, //if true this makes- this cookie can't be access or modified by the browser.or even browser cant delete this cookie//this makes the browser only store the cookie and send it along request every time a request made to the website server(where cookie originally created )
   };
 
   //attaching cookie to response object
