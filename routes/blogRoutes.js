@@ -30,17 +30,17 @@ const corsOptions = {
 // app.use("*", cors(corsOptions)); // npm i cors
 // router.options("/blogs", cors(corsOptions));
 
-// GET ALL USERS
-router
-  .route("/blogs")
-  .get(blogController.getAllBlogs)
-  .post(blogController.createBlog);
-
 // UPDATE AND DELETE Blog
 router
   .route("/blogs/:blogId")
   .get(blogController.getBlog)
   .patch(blogController.updateBlog)
   .delete(authController.isRouteProtected, blogController.deleteBlog);
+
+// GET ALL USERS
+router
+  .route("/blogs")
+  .get(blogController.getAllBlogs)
+  .post(blogController.createBlog);
 
 module.exports = router;
