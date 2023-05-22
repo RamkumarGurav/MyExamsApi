@@ -47,6 +47,48 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
   });
 });
 //--------------------------------------------------------
+//-------------Get All Procuts--------------------------------
+exports.getAllMyBlogs = catchAsyncErrors(async (req, res, next) => {
+  const resultsPerPage = req.query.limit; //for pagination
+  const blogsCount = await Blog.countDocuments(); //total no. of Blogs without any queries
+  req.query.user = req.user._id; //search by user id
+  let features = new APIFeatures(Blog.find(), req.query)
+    .filter()
+    .search()
+    .sort()
+    .limitFields();
+
+  // const doc = await features.query.explain();//used for creating indexes
+  let blogs = await features.query;
+  let filteredBlogsCount = blogs.length; //total no. of blogs after queries before pagination because we need to know how many total blogs are found before dividing them into pages
+  features = new APIFeatures(Blog.find(), req.query)
+    .filter()
+    .search()
+    .sort()
+    .limitFields()
+    .paginate(resultsPerPage);
+
+  blogs = await features.query;
+  const results = blogs.length;
+
+  //SENDING RESPONSE
+  res.status(200).json({
+    status: "success",
+    results,
+    data: {
+      blogs,
+      blogsCount,
+      filteredBlogsCount,
+      currentPage: Number(req.query.page),
+      resultsPerPage: resultsPerPage,
+      numberOfPages: Math.ceil(blogsCount / Number(resultsPerPage)), //calculateing total no. of pages
+      numberOfPagesQuery: Math.ceil(
+        filteredBlogsCount / Number(resultsPerPage)
+      ), //calculateing total no. of pages for query results
+    },
+  });
+});
+//--------------------------------------------------------
 
 //------------Get a blog---------------------------------
 exports.getBlog = catchAsyncErrors(async (req, res, next) => {

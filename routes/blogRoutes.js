@@ -12,7 +12,7 @@ router
 
 router
   .route("/blogs/mine")
-  .get(authController.isRouteProtected, blogController.getMyBlogs);
+  .get(authController.isRouteProtected, blogController.getAllMyBlogs);
 
 // UPDATE AND DELETE Blog
 router
