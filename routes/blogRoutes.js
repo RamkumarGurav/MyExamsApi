@@ -4,9 +4,10 @@ const blogController = require("../controllers/blogController");
 const router = express.Router();
 
 // GET ALL USERS
-router.route("/blogs").get(blogController.getAllBlogs);
-
-router.route("/blogs").post(blogController.createBlog);
+router
+  .route("/blogs")
+  .get(blogController.getAllBlogs)
+  .post(blogController.createBlog);
 
 // UPDATE AND DELETE Blog
 router
