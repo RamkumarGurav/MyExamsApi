@@ -10,15 +10,15 @@ router
   .get(blogController.getAllBlogs)
   .post(authController.isRouteProtected, blogController.createBlog);
 
+router
+  .route("/blogs/mine")
+  .get(authController.isRouteProtected, blogController.getMyBlogs);
+
 // UPDATE AND DELETE Blog
 router
   .route("/blogs/:blogId")
   .get(blogController.getBlog)
   .patch(blogController.updateBlog)
   .delete(authController.isRouteProtected, blogController.deleteBlog);
-
-router
-  .route("/blogs/mine")
-  .get(authController.isRouteProtected, blogController.getMyBlogs);
 
 module.exports = router;
