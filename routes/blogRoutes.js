@@ -4,7 +4,10 @@ const blogController = require("../controllers/blogController");
 const router = express.Router();
 
 // GET ALL USERS
-router.route("/blogs").get(blogController.getAllBlogs);
+router
+  .route("/blogs")
+  .get(authController.isRouteProtected, blogController.getAllBlogs);
+
 router
   .route("/blogs")
   .post(authController.isRouteProtected, blogController.createBlog);
