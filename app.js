@@ -38,10 +38,24 @@ const app = express();
 app.use(cookieParser()); // To parse the incoming cookies
 const corsOptions = {
   credentials: true,
-  // origin: true, // for public api
-  origin: ["https://my-exams-ramkumargurav.vercel.app","https://snextjs-h3ruppdy0-ramkumargurav.vercel.app","http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end).
-  methods: ["OPTIONS", "GET", "PATCH", "DELETE", "POST", "PUT", "HEAD"],
-  allowedHeaders:["X-CSRF-Token", "X-Requested-With", "Accept", "Accept-Version", "Content-Length", "Content-MD5", "Content-Type", "Date", "X-Api-Version","Authorization","Cookie","Access-Control-Allow-Credentials","Access-Control-Allow-Origin"]
+  origin: true, // for public api
+  // origin: ["https://my-exams-ramkumargurav.vercel.app","https://snextjs-h3ruppdy0-ramkumargurav.vercel.app","http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end).
+  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD","OPTIONS"],
+  allowedHeaders: [
+    "X-CSRF-Token",
+    "X-Requested-With",
+    "Accept",
+    "Accept-Version",
+    "Content-Length",
+    "Content-MD5",
+    "Content-Type",
+    "Date",
+    "X-Api-Version",
+    "Authorization",
+    "Cookie",
+    "Access-Control-Allow-Credentials",
+    "Access-Control-Allow-Origin",
+  ],
 };
 app.use("*", cors(corsOptions)); // npm i cors
 // app.use(
