@@ -30,14 +30,17 @@ const corsOptions = {
   methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"], //methods that are allowed in cors
   allowedHeaders: [
     //this headers are allowed
+    "Access-Control-Allow-Headers",
     "Origin",
-    "X-CSRF-Token",
-    "X-Requested-With",
     "Accept",
+    "X-Requested-With",
+    "Content-Type",
+    "Access-Control-Request-Method",
+    "Access-Control-Request-Headers",
+    "X-CSRF-Token",
     "Accept-Version",
     "Content-Length",
     "Content-MD5",
-    "Content-Type",
     "Date",
     "X-Api-Version",
     "Authorization",
