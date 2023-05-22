@@ -4,7 +4,7 @@ const authController = require("../controllers/authController");
 const cors = require("cors");
 const router = express.Router();
 
-router.options("/score", cors());
+router.options("/posts", cors());
 
 // Login and Registation and LogoutRoutes
 router.get("/posts", postController.getAllPosts);
