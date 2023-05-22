@@ -62,9 +62,9 @@ const corsOptions = {
   // //--------------------------------------------------------
 };
 // app.options("*", cors()); // enabling preflight call
+// postRouter.options("/posts", cors());
 
 app.use("*", cors(corsOptions)); // npm i cors
-postRouter.options("/posts", cors());
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
