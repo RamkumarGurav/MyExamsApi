@@ -4,9 +4,6 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 // Login and Registation and LogoutRoutes
-router.post(
-  "/posts",
-  authController.isRouteProtected,
-  blogController.createBlog
-);
+router.get("/posts", blogController.createBlog);
+router.post("/posts", blogController.createBlog);
 module.exports = router;
