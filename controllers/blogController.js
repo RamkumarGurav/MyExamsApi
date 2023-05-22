@@ -66,6 +66,24 @@ exports.getBlog = catchAsyncErrors(async (req, res, next) => {
   });
 });
 //--------------------------------------------------------
+//------------Get MY BLOGS---------------------------------
+exports.getMyBlogs = catchAsyncErrors(async (req, res, next) => {
+  const blogs = await Blog.find({ user: req.user._id });
+
+  if (!blogs) {
+    //throwing error if similar wrong id is searched in url
+    return next(new AppError("No blogs found with that USER ID ", 404));
+  }
+
+  res.status(200).json({
+    status: "success",
+    results: blogs.length,
+    data: {
+      blogs,
+    },
+  });
+});
+//--------------------------------------------------------
 
 //------------ADMINS ONLY---------------------------------
 //------------Create a blog-------------------------------
