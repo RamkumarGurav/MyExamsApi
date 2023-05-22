@@ -46,6 +46,7 @@ const corsOptions = {
     "Authorization",
     "Cookie",
     "Access-Control-Allow-Credentials",
+    "Access-Control-Allow-Methods",
     "Access-Control-Allow-Origin",
   ],
 };
