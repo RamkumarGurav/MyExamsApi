@@ -14,6 +14,12 @@ router.post("/users/register", authController.registerUser);
 router.post("/users/login", authController.login);
 router.get("/users/logout", authController.logout);
 
+router.post(
+  "/users/posts",
+  authController.isRouteProtected,
+  blogController.createBlog
+);
+
 // FORGOT AND RESET PASSWORD
 router.post("/users/password/forgot", authController.forgotPassword);
 router.patch("/users/password/reset/:token", authController.resetPassword);
