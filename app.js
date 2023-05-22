@@ -23,6 +23,8 @@ const app = express();
 //---------------------xxx-----------------------------------
 
 //
+app.options("/blogs", cors());
+
 const corsOptions = {
   credentials: true, //all the credentials like cookies ,sessions are allowed
   origin: true, // for public api //all the domains are allowed to call our api
