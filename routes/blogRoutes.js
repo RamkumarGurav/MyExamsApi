@@ -2,7 +2,9 @@ const express = require("express");
 const authController = require("../controllers/authController");
 const blogController = require("../controllers/blogController");
 const router = express.Router();
+const cors = require("cors");
 
+router.options("/blogs", cors());
 // GET ALL USERS
 router
   .route("/blogs")

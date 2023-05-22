@@ -40,7 +40,7 @@ const corsOptions = {
   credentials: true,
   origin: true, // for public api
   // origin: ["https://my-exams-ramkumargurav.vercel.app","https://snextjs-h3ruppdy0-ramkumargurav.vercel.app","http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end).
-  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD","OPTIONS"],
+  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"],
   allowedHeaders: [
     "X-CSRF-Token",
     "X-Requested-With",
@@ -123,7 +123,7 @@ if (process.env.NODE_ENV === "development") {
 //--------------------------------------------------------
 //------------routers--------------------------------
 app.get("/", (req, res) => {
-  res.send("Welcome to MyExams API");
+  res.send("Welcome to Our API");
 });
 
 app.use("/api/v1", userRouter);
