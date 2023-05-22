@@ -20,28 +20,16 @@ const blogRouter = require("./routes/blogRoutes");
 const app = express();
 
 //---------------------xxx-----------------------------------
-//--------------------------------------------------------
-//------------middleware--------------------------------------------
-//Implementing CORS -Cross-Origin Resource Sharing (CORS) is an HTTP-header based mechanism that allows a server to indicate any origins (domain, scheme, or port) other than its own from which a browser should permit loading resources.
-//this enables other websites to access our api
-// app.use(
-//   cors({
-//     origin: true,
-//     credentials: true,
-//   })
-// );
-//it adds some headers//"'Access-conterol-allow-origin':*"-->Access-conterol-allow-origin header set to everything
-//if our api(backend) is at 'https://api.natours.com' and our frontend at 'https://natours.com' then we need to set origin as frontend url in cors in our app
-//app.use(cors({origin:'https://natours.com'}))
 
-//enabling cors for all the routes in our app //here 'options' is a http method just like get,post..which is executed before real http method is executed this method asks server whether next next real http method is safe or not - so here this is enabled for all the routes so that 'delete','patch' and 'put' methods are made saf and allowed
-app.use(cookieParser()); // To parse the incoming cookies
+//
 const corsOptions = {
-  credentials: true,
-  origin: true, // for public api
+  credentials: true, //all the credentials like cookies ,sessions are allowed
+  origin: true, // for public api //all the domains are allowed to call our api
   // origin: ["https://my-exams-ramkumargurav.vercel.app","https://snextjs-h3ruppdy0-ramkumargurav.vercel.app","http://localhost:3000"], // Add your frontend origin here (Don't add '/' at the end).
-  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"],
+  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"], //methods that are allowed in cors
   allowedHeaders: [
+    //this headers are allowed
+    "Origin",
     "X-CSRF-Token",
     "X-Requested-With",
     "Accept",
@@ -58,6 +46,10 @@ const corsOptions = {
   ],
 };
 app.use("*", cors(corsOptions)); // npm i cors
+//--------------------------------------------------------
+
+app.use(cookieParser()); // To parse the incoming cookies
+
 // app.use(
 //   session({
 //     secret: "keyboard cat",
@@ -66,6 +58,7 @@ app.use("*", cors(corsOptions)); // npm i cors
 //     cookie: { secure: false, sameSite: "none" },
 //   })
 // );
+
 //Body parser middlware
 app.use(express.json({ limit: "50mb" })); //middleware for reading data from the body into req.body//here if body contains more than 10kb of data then it will not read
 
