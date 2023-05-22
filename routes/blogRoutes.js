@@ -28,7 +28,7 @@ const corsOptions = {
   ],
 };
 // app.use("*", cors(corsOptions)); // npm i cors
-router.options("/blogs", cors());
+router.options("/blogs", cors(corsOptions));
 
 router.route("/blogs").post(blogController.createBlog);
 
