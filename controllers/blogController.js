@@ -74,7 +74,7 @@ exports.createBlog = catchAsyncErrors(async (req, res, next) => {
   let formData = req.body;
   formData.user = req.user._id;
   formData.authorName = req.user.name;
-  formData.author = req.user.avatar;
+  formData.authorAvatar = req.user.avatar;
   const blog = await Blog.create(formData);
 
   res.status(201).json({
