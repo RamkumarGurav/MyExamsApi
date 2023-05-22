@@ -28,12 +28,13 @@ const corsOptions = {
   ],
 };
 // app.use("*", cors(corsOptions)); // npm i cors
-router.options("/blogs", cors(corsOptions));
-
-router.route("/blogs").post(blogController.createBlog);
+// router.options("/blogs", cors(corsOptions));
 
 // GET ALL USERS
-router.route("/blogs").get(blogController.getAllBlogs);
+router
+  .route("/blogs")
+  .get(blogController.getAllBlogs)
+  .post(blogController.createBlog);
 
 // UPDATE AND DELETE Blog
 router
