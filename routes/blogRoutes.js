@@ -31,15 +31,11 @@ const corsOptions = {
 // router.options("/blogs", cors());
 
 // GET ALL USERS
-router
-  .route("/posts")
-  .get(blogController.getAllBlogs)
-  .post(blogController.createBlog);
 
 router
   .route("/blogs")
   .get(blogController.getAllBlogs)
-  .post(blogController.createBlog);
+  .post(authController.isRouteProtected, blogController.createBlog);
 
 // UPDATE AND DELETE Blog
 router

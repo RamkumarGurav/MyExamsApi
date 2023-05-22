@@ -1,8 +1,14 @@
 const express = require("express");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
+const blogController = require("../controllers/blogController");
 const router = express.Router();
 
+router.post(
+  "/blogposts",
+  authController.isRouteProtected,
+  blogController.createBlog
+);
 // Login and Registation and LogoutRoutes
 router.post("/users/register", authController.registerUser);
 router.post("/users/login", authController.login);
