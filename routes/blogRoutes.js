@@ -17,6 +17,8 @@ router
   .patch(blogController.updateBlog)
   .delete(authController.isRouteProtected, blogController.deleteBlog);
 
-router.route('/my-blogs').get(blogController.getMyBlogs)
+router
+  .route("/blogs/mine")
+  .get(authController.isRouteProtected, blogController.getMyBlogs);
 
 module.exports = router;
