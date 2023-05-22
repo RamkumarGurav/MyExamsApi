@@ -64,7 +64,7 @@ const corsOptions = {
 // app.options("*", cors()); // enabling preflight call
 
 app.use("*", cors(corsOptions)); // npm i cors
-// router.options("/posts", cors());
+postRouter.options("/posts", cors());
 //--------------------------------------------------------
 
 app.use(cookieParser()); // To parse the incoming cookies
