@@ -61,7 +61,7 @@ const corsOptions = {
   // ],
   // //--------------------------------------------------------
 };
-// app.options("*", cors(corsOptions)); // enabling preflight call
+app.options("*", cors(corsOptions)); // enabling preflight call
 app.use("*", cors(corsOptions)); // npm i cors
 
 //--------------------------------------------------------
