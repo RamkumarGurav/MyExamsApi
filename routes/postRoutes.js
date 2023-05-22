@@ -1,9 +1,10 @@
 const express = require("express");
-const blogController = require("../controllers/blogController");
+const postController = require("../controllers/postController");
 const authController = require("../controllers/authController");
 const router = express.Router();
 
 // Login and Registation and LogoutRoutes
-router.get("/posts", blogController.createBlog);
-router.post("/posts", blogController.createBlog);
+router.get("/posts", postController.getAllPosts);
+router.post("/posts", postController.createPost);
+
 module.exports = router;

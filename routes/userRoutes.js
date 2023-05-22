@@ -4,21 +4,17 @@ const authController = require("../controllers/authController");
 const blogController = require("../controllers/blogController");
 const router = express.Router();
 
-router.post(
-  "/blogposts",
-  authController.isRouteProtected,
-  blogController.createBlog
-);
+
 // Login and Registation and LogoutRoutes
 router.post("/users/register", authController.registerUser);
 router.post("/users/login", authController.login);
 router.get("/users/logout", authController.logout);
 
-router.post(
-  "/users/posts",
-  authController.isRouteProtected,
-  blogController.createBlog
-);
+// router.post(
+//   "/users/posts",
+//   authController.isRouteProtected,
+//   blogController.createBlog
+// );
 
 // FORGOT AND RESET PASSWORD
 router.post("/users/password/forgot", authController.forgotPassword);
