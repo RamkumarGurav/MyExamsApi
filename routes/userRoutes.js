@@ -5,6 +5,7 @@ const blogController = require("../controllers/blogController");
 const router = express.Router();
 
 
+
 // Login and Registation and LogoutRoutes
 router.post("/users/register", authController.registerUser);
 router.post("/users/login", authController.login);
