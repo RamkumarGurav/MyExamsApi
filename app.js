@@ -26,34 +26,40 @@ const app = express();
 
 const corsOptions = {
   credentials: true, //all the credentials like cookies ,sessions are allowed
-  // origin: true, // for public api //all the domains are allowed to call our api
-  origin: [
-    "https://my-exams-ramkumargurav.vercel.app",
-    "https://snextjs-h3ruppdy0-ramkumargurav.vercel.app",
-    "http://localhost:3000",
-  ], // Add your frontend origin here (Don't add '/' at the end).
-  methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"], //methods that are allowed in cors
-  allowedHeaders: [
-    //this headers are allowed
-    "Access-Control-Allow-Headers",
-    "Origin",
-    "Accept",
-    "X-Requested-With",
-    "Content-Type",
-    "Access-Control-Request-Method",
-    "Access-Control-Request-Headers",
-    "X-CSRF-Token",
-    "Accept-Version",
-    "Content-Length",
-    "Content-MD5",
-    "Date",
-    "X-Api-Version",
-    "Authorization",
-    "Cookie",
-    "Access-Control-Allow-Credentials",
-    "Access-Control-Allow-Methods",
-    "Access-Control-Allow-Origin",
-  ],
+  origin: true, // for public api //all the domains are allowed to call our api
+  methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
+  allowedHeaders:
+    "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+
+  // //--------------------------------------------------------
+  // origin: [
+  //   "https://my-exams-ramkumargurav.vercel.app",
+  //   "https://snextjs-h3ruppdy0-ramkumargurav.vercel.app",
+  //   "http://localhost:3000",
+  // ], // Add your frontend origin here (Don't add '/' at the end).
+  // methods: ["GET", "PATCH", "DELETE", "POST", "PUT", "HEAD", "OPTIONS"], //methods that are allowed in cors
+  // allowedHeaders: [
+  //   //this headers are allowed
+  //   "Access-Control-Allow-Headers",
+  //   "Origin",
+  //   "Accept",
+  //   "X-Requested-With",
+  //   "Content-Type",
+  //   "Access-Control-Request-Method",
+  //   "Access-Control-Request-Headers",
+  //   "X-CSRF-Token",
+  //   "Accept-Version",
+  //   "Content-Length",
+  //   "Content-MD5",
+  //   "Date",
+  //   "X-Api-Version",
+  //   "Authorization",
+  //   "Cookie",
+  //   "Access-Control-Allow-Credentials",
+  //   "Access-Control-Allow-Methods",
+  //   "Access-Control-Allow-Origin",
+  // ],
+  // //--------------------------------------------------------
 };
 app.use("*", cors(corsOptions)); // npm i cors
 app.options("*", cors()); // enabling preflight call
