@@ -6,9 +6,7 @@ const router = express.Router();
 // GET ALL USERS
 router.route("/blogs").get(blogController.getAllBlogs);
 
-router
-  .route("/blogs")
-  .post(authController.isRouteProtected, blogController.createBlog);
+router.route("/blogs").post(blogController.createBlog);
 
 // UPDATE AND DELETE Blog
 router
