@@ -18,7 +18,7 @@ router
 router
   .route("/blogs/:blogId")
   .get(blogController.getBlog)
-  .patch(authController.isRouteProtected,blogController.updateBlog)
+  .patch(authController.isRouteProtected, blogController.updateBlog)
   .delete(authController.isRouteProtected, blogController.deleteBlog);
 
 module.exports = router;
