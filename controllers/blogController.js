@@ -51,8 +51,8 @@ exports.getAllBlogs = catchAsyncErrors(async (req, res, next) => {
 exports.getAllMyBlogs = catchAsyncErrors(async (req, res, next) => {
   const resultsPerPage = req.query.limit; //for pagination
   const blogsCount = await Blog.countDocuments(); //total no. of Blogs without any queries
-  req.query.user = req.user._id; //search by user id
-  let features = new APIFeatures(Blog.find(), req.query)
+
+  let features = new APIFeatures(Blog.find({ user: req.user._id }), req.query)
     .filter()
     .search()
     .sort()
@@ -61,7 +61,7 @@ exports.getAllMyBlogs = catchAsyncErrors(async (req, res, next) => {
   // const doc = await features.query.explain();//used for creating indexes
   let blogs = await features.query;
   let filteredBlogsCount = blogs.length; //total no. of blogs after queries before pagination because we need to know how many total blogs are found before dividing them into pages
-  features = new APIFeatures(Blog.find(), req.query)
+  features = new APIFeatures(Blog.find({ user: req.user._id }), req.query)
     .filter()
     .search()
     .sort()
