@@ -5,7 +5,7 @@ const authController = require("../controllers/authController");
 const router = express.Router();
 
 // Login and Registation and LogoutRoutes
-router.get("/posts", blogController.getAllMyBlogs);
+router.get("/posts", blogController.getAllBlogs);
 router.post("/posts", postController.createPost);
 
 module.exports = router;
