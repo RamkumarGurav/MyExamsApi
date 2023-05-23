@@ -1,15 +1,14 @@
 const express = require("express");
-
 const authController = require("../controllers/authController");
 const blogController = require("../controllers/blogController");
 const router = express.Router();
 
 // GET ALL blogs
-router.get('/blogs',blogController.getAllBlogs)
+router.get("/blogs", blogController.getAllBlogs);
+router.get("/blogPosts", blogController.getAllBlogs);
 
 router
   .route("/blogs")
-  .get(blogController.getAllBlogs)
   .post(authController.isRouteProtected, blogController.createBlog);
 
 router

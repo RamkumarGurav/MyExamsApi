@@ -3,14 +3,15 @@ const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
 const APIFeatures = require("../utils/APIFeatures");
 const Post = require("../models/postModel");
+const Blog = require("../models/blogModel");
 //--------------------------------------------------------
 
 //-------------Get All Procuts--------------------------------
 exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   const resultsPerPage = req.query.limit; //for pagination
-  const postsCount = await Post.countDocuments(); //total no. of posts without any queries
+  const postsCount = await Blog.countDocuments(); //total no. of posts without any queries
 
-  let features = new APIFeatures(Post.find(), req.query)
+  let features = new APIFeatures(Blog.find(), req.query)
     .filter()
     .search()
     .sort()
@@ -19,7 +20,7 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   // const doc = await features.query.explain();//used for creating indexes
   let posts = await features.query;
   let filteredPostsCount = posts.length; //total no. of posts after queries before pagination because we need to know how many total posts are found before dividing them into pages
-  features = new APIFeatures(Post.find(), req.query)
+  features = new APIFeatures(Blog.find(), req.query)
     .filter()
     .search()
     .sort()
