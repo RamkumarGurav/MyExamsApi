@@ -17,19 +17,19 @@ const postSchema = new mongoose.Schema(
       trim: true,
       required: [true, "Please enter blogpost description"],
     },
-    // user: {
-    //   type: mongoose.Schema.ObjectId,
-    //   ref: "User",
-    //   required: true,
-    // },
-    // authorName: {
-    //   type: String,
-    //   required: [true, "Please enter blogpost author name"],
-    // },
-    // authorAvatar: {
-    //   type: String,
-    //   required: [true, "Please enter blogpost author avatar "],
-    // },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    authorName: {
+      type: String,
+      required: [true, "Please enter blogpost author name"],
+    },
+    authorAvatar: {
+      type: String,
+      required: [true, "Please enter blogpost author avatar "],
+    },
     image: {
       type: String,
       default: "/defautlPost.jpg",
@@ -60,6 +60,6 @@ const postSchema = new mongoose.Schema(
   }
 );
 
-const Post = mongoose.model("Post", postSchema);
+const Post = mongoose.model("Post", blogSchema);
 
 module.exports = Post;
