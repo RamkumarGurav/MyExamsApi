@@ -92,6 +92,7 @@ exports.getAllMyPosts = catchAsyncErrors(async (req, res, next) => {
 //--------------------------------------------------------
 //------------Get a Post---------------------------------
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
+  console.log(req.params.id);
   const post = await Post.findById(req.params.id);
 
   if (!post) {
