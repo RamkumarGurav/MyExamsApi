@@ -4,7 +4,7 @@ const postController = require("../controllers/postController");
 const router = express.Router();
 
 // GET ALL blogs
-router.get("/posts", postController.getAlPposts);
+router.get("/posts", postController.getAllPosts);
 
 router
   .route("/posts")
