@@ -17,7 +17,6 @@ const packageRouter = require("./routes/packageRoutes");
 const orderRouter = require("./routes/orderRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const postRouter = require("./routes/postRoutes");
-const blogRouter = require("./routes/blogRoutes");
 
 const app = express();
 
@@ -151,7 +150,6 @@ app.use("/api/v1", productRouter);
 app.use("/api/v1", orderRouter);
 app.use("/api/v1", paymentRouter);
 app.use("/api/v1", packageRouter);
-app.use("/api/v1", blogRouter);
 app.use("/api/v1", postRouter);
 
 //-----HANDLING UNHANDLED ROUTES---------------------------
