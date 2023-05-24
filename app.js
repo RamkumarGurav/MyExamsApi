@@ -130,7 +130,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+app.use(favicon(__dirname + "/public/images/favicon.ico"));
 //--------------------------------------------------------
 //
 //--------------------------------------------------------
@@ -138,6 +138,7 @@ app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 app.get("/", (req, res) => {
   res.send("Welcome to Our API");
 });
+app.get("/favicon.ico", (req, res) => res.status(200));
 
 app.use("/api/v1", userRouter);
 app.use("/api/v1", questionRouter);
