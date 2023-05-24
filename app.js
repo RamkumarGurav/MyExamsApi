@@ -27,11 +27,8 @@ const app = express();
 const corsOptions = {
   credentials: true, //all the credentials like cookies ,sessions are allowed
   // origin: true, // for public api //all the domains are allowed to call our api//
-  origin: [
-    "https://my-exams-ramkumargurav.vercel.app",
-    "https://myblogs-ramkumargurav.vercel.app",
-    "http://localhost:3000",
-  ],
+  origin:
+    "https://my-exams-ramkumargurav.vercel.app,https://myblogs-ramkumargurav.vercel.app,http://localhost:3000",
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
   allowedHeaders:
     "Access-Control-Allow-Headers, Origin,Accept,Authorization, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
