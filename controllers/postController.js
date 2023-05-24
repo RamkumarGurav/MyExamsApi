@@ -113,9 +113,13 @@ exports.getPost = catchAsyncErrors(async (req, res, next) => {
 //------------Create a Post-------------------------------
 exports.createPost = catchAsyncErrors(async (req, res, next) => {
   // req.body.user = req.user._id; //id of user/admin who will create this post
-  req.body.user = req.user._id;
-  req.body.authorName = req.user.name;
-  req.body.authorAvatar = req.user.avatar;
+  req.body = {
+    ...req.body,
+    user: req.user._id,
+    authorName: req.user.name,
+    authorAvatar:
+      "https://res.cloudinary.com/devxhziev/image/upload/v1679750336/samples/people/kitchen-bar.jpg",
+  };
 
   const post = await Post.create(req.body);
 
