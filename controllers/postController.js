@@ -47,7 +47,49 @@ exports.getAllPosts = catchAsyncErrors(async (req, res, next) => {
   });
 });
 //--------------------------------------------------------
+//--------------------------------------------------------
+//-------------Get All Procuts--------------------------------
+exports.getAllMyPosts = catchAsyncErrors(async (req, res, next) => {
+  const resultsPerPage = req.query.limit; //for pagination
+  const postsCount = await Post.countDocuments(); //total no. of posts without any queries
 
+  let features = new APIFeatures(Post.find({ user: req.user._id }), req.query)
+    .filter()
+    .search()
+    .sort()
+    .limitFields();
+
+  // const doc = await features.query.explain();//used for creating indexes
+  let posts = await features.query;
+  let filteredPostsCount = posts.length; //total no. of posts after queries before pagination because we need to know how many total posts are found before dividing them into pages
+  features = new APIFeatures(Post.find({ user: req.user._id }), req.query)
+    .filter()
+    .search()
+    .sort()
+    .limitFields()
+    .paginate(resultsPerPage);
+
+  posts = await features.query;
+  const results = posts.length;
+
+  //SENDING RESPONSE
+  res.status(200).json({
+    status: "success",
+    results,
+    data: {
+      posts,
+      postsCount,
+      filteredPostsCount,
+      currentPage: Number(req.query.page),
+      resultsPerPage: resultsPerPage,
+      numberOfPages: Math.ceil(postsCount / Number(resultsPerPage)), //calculateing total no. of pages
+      numberOfPagesQuery: Math.ceil(
+        filteredPostsCount / Number(resultsPerPage)
+      ), //calculateing total no. of pages for query results
+    },
+  });
+});
+//--------------------------------------------------------
 //------------Get a Post---------------------------------
 exports.getPost = catchAsyncErrors(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
