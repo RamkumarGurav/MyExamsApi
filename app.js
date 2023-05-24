@@ -141,7 +141,7 @@ if (process.env.NODE_ENV === "development") {
 //--------------------------------------------------------
 //------------routers--------------------------------
 app.get("/", (req, res) => {
-  res.send("Welcome to Our API");
+  res.send("Welcome to Our API.");
 });
 app.get("/favicon.ico", (req, res) => res.status(200));
 
