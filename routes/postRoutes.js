@@ -16,7 +16,7 @@ router
 
 // UPDATE AND DELETE post
 router
-  .route("/posts/:postId")
+  .route("/posts/:id")
   .get(postController.getPost)
   .patch(authController.isRouteProtected, postController.updatePost)
   .delete(authController.isRouteProtected, postController.deletePost);
