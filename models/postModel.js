@@ -18,9 +18,8 @@ const postSchema = new mongoose.Schema(
       required: [true, "Please enter blogpost description"],
     },
     user: {
-      type: mongoose.Schema.ObjectId,
-      ref: "User",
-      required: true,
+      type: String,
+      required: [true, "Please enter blogpost author"],
     },
     authorName: {
       type: String,
