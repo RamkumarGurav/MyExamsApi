@@ -4,6 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
+const favicon = require("serve-favicon");
 
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/AppError");
@@ -129,6 +130,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
+app.use(favicon(path.join(__dirname, "public", "favicon.ico")));
 //--------------------------------------------------------
 //
 //--------------------------------------------------------
