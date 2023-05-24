@@ -130,7 +130,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
 }
 
-app.use(favicon(__dirname + "/public/images/favicon.ico"));
+// app.use(favicon(__dirname + "/public/images/favicon.ico"));
 //--------------------------------------------------------
 //
 //--------------------------------------------------------
