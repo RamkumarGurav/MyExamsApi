@@ -113,6 +113,9 @@ exports.getPost = catchAsyncErrors(async (req, res, next) => {
 //------------Create a Post-------------------------------
 exports.createPost = catchAsyncErrors(async (req, res, next) => {
   // req.body.user = req.user._id; //id of user/admin who will create this post
+  req.body.user = req.user._id;
+  req.body.authorName = req.user.name;
+  req.body.authorAvatar = req.user.avatar;
 
   const post = await Post.create(req.body);
 
