@@ -117,8 +117,7 @@ exports.createPost = catchAsyncErrors(async (req, res, next) => {
     ...req.body,
     user: req.user._id,
     authorName: req.user.name,
-    authorAvatar:
-      "https://res.cloudinary.com/devxhziev/image/upload/v1679750336/samples/people/kitchen-bar.jpg",
+    authorAvatar: req.user.avatar,
   };
 
   const post = await Post.create(req.body);
