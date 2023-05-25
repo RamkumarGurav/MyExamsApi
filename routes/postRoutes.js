@@ -21,4 +21,12 @@ router
   .patch(authController.isRouteProtected, postController.updatePost)
   .delete(authController.isRouteProtected, postController.deletePost);
 
+router
+  .route("/admin/posts/:id")
+  .delete(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    postController.deletePost
+  );
+
 module.exports = router;
