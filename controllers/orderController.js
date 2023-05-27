@@ -52,20 +52,20 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
     client_reference_id: totalPrice, //productIDs is requiered to create booking in the data base
-    // shipping_address_collection: {
-    //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
-    // },
-    // shipping_details: {
-    //   name: shippingInfo.name,
-    //   address: {
-    //     line1: shippingInfo.address,
-    //     line2: shippingInfo.phoneNo,
-    //     city: shippingInfo.city,
-    //     state: shippingInfo.state,
-    //     postal_code: shippingInfo.pinCode,
-    //     country: "IN",
-    //   },
-    // },
+    shipping_address_collection: {
+      allowed_countries: ["IN"], // Specify the allowed countries for shipping
+    },
+    shipping_details: {
+      name: shippingInfo.name,
+      address: {
+        line1: shippingInfo.address,
+        line2: shippingInfo.phoneNo,
+        city: shippingInfo.city,
+        state: shippingInfo.state,
+        postal_code: shippingInfo.pinCode,
+        country: "IN",
+      },
+    },
 
     // shipping_options: [
     //   {
@@ -160,14 +160,14 @@ const createOrderCheckout = async (session) => {
 
   // console.log(shippingInfo, orderedItems, paymentInfo, totalPrice,user);
 
-  // const order = await Order.create({
-  //   shippingInfo,
-  //   orderedItems,
-  //   paymentInfo,
-  //   totalPrice,
-  //   paidAt: Date.now(),
-  //   user: user,
-  // });
+  const order = await Order.create({
+    shippingInfo,
+    orderedItems,
+    paymentInfo,
+    totalPrice,
+    paidAt: Date.now(),
+    user: user,
+  });
 };
 
 exports.webhookCheckout = (req, res, next) => {
