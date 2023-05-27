@@ -52,9 +52,9 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
     client_reference_id: totalPrice, //productIDs is requiered to create booking in the data base
-    shipping_address_collection: {
-      allowed_countries: ["IN"], // Specify the allowed countries for shipping
-    },
+    // shipping_address_collection: {
+    //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
+    // },
     metadeta: {
       shippingInfo,
       orderedItems,
