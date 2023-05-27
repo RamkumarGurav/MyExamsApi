@@ -26,8 +26,8 @@ const villaReservationSchema = new mongoose.Schema(
     },
     rooms: {
       type: Number,
-      min: [1, 'number of rooms must be above 1'],
-      max: [20, 'number of rooms must be below 20'],
+      min: [1, "number of rooms must be above 1"],
+      max: [20, "number of rooms must be below 20"],
       required: [true, "Please enter number of rooms you want to book"],
     },
     checkInDate: {
@@ -39,6 +39,13 @@ const villaReservationSchema = new mongoose.Schema(
       type: Date,
       min: new Date(),
       required: [true, "Please Enter Check-Out Date"],
+      validate: {
+        validator: function (checkOutDate) {
+          // this only points to current doc on NEW document creation
+          return checkOutDate > this.checkInDate;
+        },
+        message: "check-out should be greater than check-in date",
+      },
     },
     createdAt: {
       type: Date,
