@@ -42,7 +42,6 @@ const orderSchema = new mongoose.Schema(
           //product reference(ID)
           type: mongoose.Schema.ObjectId,
           ref: "Product",
-          required: true,
         },
         price: {
           type: Number,
