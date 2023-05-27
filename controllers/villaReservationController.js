@@ -67,7 +67,6 @@ exports.getVillaReservation = catchAsyncErrors(async (req, res, next) => {
 });
 //--------------------------------------------------------
 
-//------------ADMINS ONLY---------------------------------
 //------------Create a VillaReservation-------------------------------
 exports.createVillaReservation = catchAsyncErrors(async (req, res, next) => {
   const villaReservation = await VillaReservation.create(req.body);
