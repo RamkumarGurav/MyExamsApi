@@ -13,3 +13,5 @@ router
   .get(villaReservationController.getVillaReservation)
   .patch(villaReservationController.updateVillaReservation)
   .delete(villaReservationController.deleteVillaReservation);
+
+module.exports = router;
