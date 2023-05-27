@@ -71,7 +71,7 @@ exports.getVillaReservation = catchAsyncErrors(async (req, res, next) => {
 //------------Create a VillaReservation-------------------------------
 exports.createVillaReservation = catchAsyncErrors(async (req, res, next) => {
   const villaReservation = await VillaReservation.create(req.body);
-  const message = `Hi ${req.body.name}\n\nThank You for Choosing Us,\n\n You have reserved ${req.body.rooms}\n\n You can check-in on ${req.body.checkInDate}\n\nIf you have not requested this email then Please ignore it`;
+  const message = `Hi ${req.body.name}\n\nThank You for Choosing Us,\n You have reserved ${req.body.rooms}rooms \n You can check-in on  ${req.body.checkInDate} morning and check-out on ${req.body.checkOutDate} evening\n\nIf you have not requested this email then Please ignore it`;
 
   const user = { email: req.body.email, name: req.body.name };
   await new Email(user, message).sendVillaReservationMsg();

@@ -48,6 +48,6 @@ module.exports = class Email {
   }
 
   async sendVillaReservationMsg() {
-    await this.send(`Your Reservation is Successfull`);
+    await this.send(`Your Royal Villas Reservation is Successfull`);
   }
 };
