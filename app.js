@@ -33,7 +33,7 @@ const corsOptions = {
   origin: [
     "https://my-exams-ramkumargurav.vercel.app",
     "https://myblogs-ramkumargurav.vercel.app",
-    "https://royal-villas-ramkumargurav.vercel.app ",
+    "https://royal-villas-ramkumargurav.vercel.app",
     "http://localhost:3000",
   ],
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
