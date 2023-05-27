@@ -17,6 +17,7 @@ const packageRouter = require("./routes/packageRoutes");
 const orderRouter = require("./routes/orderRoutes");
 const paymentRouter = require("./routes/paymentRoutes");
 const postRouter = require("./routes/postRoutes");
+const villaReservationRouter = require("./routes/villaReservationRoutes");
 
 const app = express();
 
@@ -142,7 +143,7 @@ if (process.env.NODE_ENV === "development") {
 app.get("/", (req, res) => {
   res.send("Welcome to Our API.");
 });
-app.get("/favicon.ico", (req, res) => res.status(200));
+app.get("/favicon.ico", (req, res) => res.status(200));//solving '/favicon.ico' error
 
 app.use("/api/v1", userRouter);
 app.use("/api/v1", questionRouter);
@@ -151,6 +152,7 @@ app.use("/api/v1", orderRouter);
 app.use("/api/v1", paymentRouter);
 app.use("/api/v1", packageRouter);
 app.use("/api/v1", postRouter);
+app.use("/api/v1", villaReservationRouter);
 
 //-----HANDLING UNHANDLED ROUTES---------------------------
 app.use("*", (req, res, next) => {
