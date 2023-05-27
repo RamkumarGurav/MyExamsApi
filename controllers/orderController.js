@@ -55,16 +55,9 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     shipping_address_collection: {
       allowed_countries: ["IN"], // Specify the allowed countries for shipping
     },
-    shipping_details: {
-      name: shippingInfo.name,
-      address: {
-        line1: shippingInfo.address,
-        line2: shippingInfo.phoneNo,
-        city: shippingInfo.city,
-        state: shippingInfo.state,
-        postal_code: shippingInfo.pinCode,
-        country: "IN",
-      },
+    metadeta: {
+      shippingInfo,
+      orderedItems,
     },
 
     // shipping_options: [
@@ -133,30 +126,23 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 //   await Order.create({ tour, user, price });
 // };
 const createOrderCheckout = async (session) => {
-  console.log(session);
-  // const shippingInfo = {
-  //   name: session.shipping_details.name,
-  //   address: session.shipping_details.address.line1,
-  //   phoneNo: session.shipping_details.address.line2,
-  //   city: session.shipping_details.address.city,
-  //   state: session.shipping_details.address.state,
-  //   country: session.shipping_details.address.country,
-  //   pinCode: session.shipping_details.address.postal_code,
-  // };
+  // console.log(session);
+  const shippingInfo = session.metadeta.shippingInfo;
+  const orderedItems = session.metadeta.orderedItems;
 
   const paymentInfo = { sessionId: session.id, status: "completed" };
   const totalPrice = session.client_reference_id;
   const user = session.customer;
-  const orderedItems = session.line_items.map((item) => {
-    return {
-      name: item.price_data.product_data.name.split("--")[0],
-      productId: item.price_data.product_data.name.split("--")[1],
+  // const orderedItems = session.line_items.map((item) => {
+  //   return {
+  //     name: item.price_data.product_data.name.split("--")[0],
+  //     productId: item.price_data.product_data.name.split("--")[1],
 
-      image: item.price_data.product_data.images[0],
-      price: item.price_data.unit_amount / 100,
-      quantity: item.quantity,
-    };
-  });
+  //     image: item.price_data.product_data.images[0],
+  //     price: item.price_data.unit_amount / 100,
+  //     quantity: item.quantity,
+  //   };
+  // });
 
   // console.log(shippingInfo, orderedItems, paymentInfo, totalPrice,user);
 
