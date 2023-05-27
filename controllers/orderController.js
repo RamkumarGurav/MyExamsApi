@@ -56,8 +56,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
     // },
     metadata: {
-      shippingInfo,
-      orderedItems,
+      ...shippingInfo,
     },
 
     // shipping_options: [
@@ -97,15 +96,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     }),
   });
 
-  // const order = await Order.create({
-  //   shippingInfo,
-  //   orderedItems,
-  //   paymentInfo: { sessionId: session.id, status: "completed" },
-  //   totalPrice,
-  //   paidAt: Date.now(),
-  //   user: req.user._id,
-  // });
-
   //step3)send the checkout session in response
   res.status(200).json({
     status: "success",
@@ -127,22 +117,29 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 // };
 const createOrderCheckout = async (session) => {
   // console.log(session);
-  const shippingInfo = session.metadata.shippingInfo;
-  const orderedItems = session.metadata.orderedItems;
+  const shippingInfo = {
+    name: session.metadata.name,
+    address: session.metadata.address,
+    city: session.metadata.city,
+    state: session.metadata.state,
+    country: session.metadata.country,
+    phoneNo: session.metadata.phoneNo,
+    pinCode: session.metadata.pinCode,
+  };
 
   const paymentInfo = { sessionId: session.id, status: "completed" };
   const totalPrice = session.client_reference_id;
   const user = session.customer;
-  // const orderedItems = session.line_items.map((item) => {
-  //   return {
-  //     name: item.price_data.product_data.name.split("--")[0],
-  //     productId: item.price_data.product_data.name.split("--")[1],
+  const orderedItems = session.line_items.map((item) => {
+    return {
+      name: item.price_data.product_data.name.split("--")[0],
+      product: item.price_data.product_data.name.split("--")[1],
 
-  //     image: item.price_data.product_data.images[0],
-  //     price: item.price_data.unit_amount / 100,
-  //     quantity: item.quantity,
-  //   };
-  // });
+      image: item.price_data.product_data.images[0],
+      price: item.price_data.unit_amount / 100,
+      quantity: item.quantity,
+    };
+  });
 
   // console.log(shippingInfo, orderedItems, paymentInfo, totalPrice,user);
 

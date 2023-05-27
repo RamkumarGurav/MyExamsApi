@@ -38,10 +38,11 @@ const orderSchema = new mongoose.Schema(
           type: String,
           required: true,
         },
-        productId: {
+        product: {
           //product reference(ID)
           type: mongoose.Schema.ObjectId,
           ref: "Product",
+          required: true,
         },
         price: {
           type: Number,
