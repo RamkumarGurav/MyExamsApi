@@ -46,4 +46,8 @@ module.exports = class Email {
   async sendResetPasswordUrl() {
     await this.send(`MyExams Password Recovery`);
   }
+
+  async sendVillaReservationMsg() {
+    await this.send(`Your Reservation is Successfull`);
+  }
 };
