@@ -96,9 +96,8 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
           currency: "inr",
           unit_amount: item.price * 100, //converting in rupee//1 rupee is 100paisa
           product_data: {
-            name: `${item.name}`,
+            name: `${item.name}--${item.productId}`,
             images: [`${item.image}`],
-            productId: `${item.productId}`,
           },
         },
       };
@@ -150,8 +149,9 @@ const createOrderCheckout = async (session) => {
   const user = session.customer;
   const orderedItems = session.line_items.map((item) => {
     return {
-      name: item.price_data.product_data.name,
-      productId: item.price_data.product_data.productId,
+      name: item.price_data.product_data.name.split("--")[0],
+      productId: item.price_data.product_data.name.split("--")[1],
+
       image: item.price_data.product_data.images[0],
       price: item.price_data.unit_amount / 100,
       quantity: item.quantity,
