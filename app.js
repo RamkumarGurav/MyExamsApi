@@ -8,6 +8,7 @@ const favicon = require("serve-favicon");
 
 const globalErrorHandler = require("./controllers/errorController");
 const AppError = require("./utils/AppError");
+const orderController = require("./controllers/orderController");
 
 //--------Route iMPORTs------
 const userRouter = require("./routes/userRoutes");
@@ -85,6 +86,12 @@ app.use(cookieParser()); // To parse the incoming cookies
 //     cookie: { secure: false, sameSite: "none" },
 //   })
 // );
+
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  orderController.webhookCheckout
+);
 
 //Body parser middlware
 app.use(express.json({ limit: "50mb" })); //middleware for reading data from the body into req.body//here if body contains more than 10kb of data then it will not read

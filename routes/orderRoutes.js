@@ -5,9 +5,9 @@ const orderController = require("../controllers/orderController");
 const router = express.Router();
 
 // // CREATE A ORDER
-router
-  .route("/orders")
-  .post(authController.isRouteProtected, orderController.createOrder);
+// router
+//   .route("/orders")
+//   .post(authController.isRouteProtected, orderController.createOrder);
 
 // GET MY ALL ORDERS DETAILS
 router

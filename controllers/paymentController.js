@@ -50,7 +50,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
-    client_reference_id: req.user._id, //tourId is requiered to create booking in the data base
+    client_reference_id: req.user._id, //productID is requiered to create booking in the data base
 
     // shipping_options: [
     //   {
@@ -110,3 +110,32 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     user: req.user._id,
   });
 });
+
+
+
+const createBookingCheckout = async (session) => {
+  const tour = session.client_reference_id;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+  const price = session.display_items[0].amount / 100;
+  await Order.create({ tour, user, price });
+};
+
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers['stripe-signature'];
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === 'checkout.session.completed')
+    createBookingCheckout(event.data.object);
+
+  res.status(200).json({ received: true });
+};

@@ -6,6 +6,189 @@ const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 //--------------------------------------------------------
+//--------------------------------------------------------
+
+//------------Creating and sending Checkout Session---------------------------------------
+exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
+  //step1)Get the currently booked tour
+  const {
+    shippingInfo,
+    orderedItemsDetails,
+    // paymentInfo,
+    address,
+    totalPrice,
+  } = req.body;
+
+  let ids = orderedItemsDetails.map((item, i) => {
+    // const product = await Product.findById(item.productId);
+    return item.productId;
+  });
+  const records = await Product.find().where("_id").in(ids).exec();
+  // console.log(records);
+  // console.log(orderedItems);
+  const orderedItems = records.map((rec, i) => {
+    return {
+      name: rec._doc.name,
+      productId: rec._doc._id,
+      image: rec._doc.images[0].url,
+      price: rec._doc.price,
+      quantity: orderedItemsDetails[i].quantity,
+    };
+  });
+
+  // console.log(orderedItems);
+
+  //step2)Create the checkout session
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment", //mode of session
+    payment_method_types: ["card"], //payment methods
+    //---------------dev mod-------------------------------
+    success_url: `${process.env.FRONTEND_URL}/order/payment-success/pi_BkSw7WFuxtjr1RaUmjFUDtj`, //when payment is successfull browsesr goes to this url //
+    //--------------------------------------------------------
+    //----------------after deployment---------------------------------
+    // success_url: `${req.protocol}://${req.get('host')}/my-tours`,
+    //--------------------------------------------------------
+    cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
+    customer_email: req.user.email, //need customer email in the reciept
+    customer: req.user._id,
+    client_reference_id: totalPrice, //productIDs is requiered to create booking in the data base
+    shipping_details: {
+      name: shippingInfo.name,
+      address: {
+        line1: shippingInfo.address,
+        line2: shippingInfo.phoneNo,
+        city: shippingInfo.city,
+        state: shippingInfo,
+        state,
+        postal_code: shippingInfo.pinCode,
+        country: "IN",
+      },
+    },
+
+    // shipping_options: [
+    //   {
+    //     shipping_rate_data: {
+    //       type: "fixed_amount",
+    //       fixed_amount: {
+    //         amount: 100,
+    //         currency: "inr",
+    //       },
+    //       display_name: "BlipKart shiipping",
+    //       delivery_estimate: {
+    //         minimum: {
+    //           unit: "business_day",
+    //           value: 1,
+    //         },
+    //         maximum: {
+    //           unit: "business_day",
+    //           value: 1,
+    //         },
+    //       },
+    //     },
+    //   },
+    // ],
+    line_items: orderedItems.map((item) => {
+      return {
+        quantity: item.quantity,
+        price_data: {
+          currency: "inr",
+          unit_amount: item.price * 100, //converting in rupee//1 rupee is 100paisa
+          product_data: {
+            name: `${item.name}`,
+            images: [`${item.image}`],
+            productId: `${item.productId}`,
+          },
+        },
+      };
+    }),
+  });
+
+  // const order = await Order.create({
+  //   shippingInfo,
+  //   orderedItems,
+  //   paymentInfo: { sessionId: session.id, status: "completed" },
+  //   totalPrice,
+  //   paidAt: Date.now(),
+  //   user: req.user._id,
+  // });
+
+  //step3)send the checkout session in response
+  res.status(200).json({
+    status: "success",
+    session,
+    paymentInfo: { sessionId: session.id, status: "completed" },
+    orderedItems,
+    shippingInfo,
+    totalPrice,
+    // paidAt: Date.now(),
+    user: req.user._id,
+  });
+});
+
+// const createBookingCheckout = async (session) => {
+//   const tour = session.client_reference_id;
+//   const user = (await User.findOne({ email: session.customer_email })).id;
+//   const price = session.display_items[0].amount / 100;
+//   await Order.create({ tour, user, price });
+// };
+const createOrderCheckout = async (session) => {
+  console.log(session.line_items[0].price_data.product_data.name);
+  console.log(session.line_items[0].price_data.product_data.product);
+  const shippingInfo = {
+    name: session.shipping_details.name,
+    address: session.shipping_details.address.line1,
+    phoneNo: session.shipping_details.address.line2,
+    city: session.shipping_details.address.city,
+    state: session.shipping_details.address.state,
+    country: session.shipping_details.address.country,
+    pinCode: session.shipping_details.address.postal_code,
+  };
+
+  const paymentInfo = { sessionId: session.id, status: "completed" };
+  const totalPrice = session.client_reference_id;
+  const user = session.customer;
+  const orderedItems = session.line_items.map((item) => {
+    return {
+      name: item.price_data.product_data.name,
+      productId: item.price_data.product_data.productId,
+      image: item.price_data.product_data.images[0],
+      price: item.price_data.unit_amount / 100,
+      quantity: item.quantity,
+    };
+  });
+
+  // console.log(shippingInfo, orderedItems, paymentInfo, totalPrice,user);
+
+  const order = await Order.create({
+    shippingInfo,
+    orderedItems,
+    paymentInfo,
+    totalPrice,
+    paidAt: Date.now(),
+    user: user,
+  });
+};
+
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+
+  if (event.type === "checkout.session.completed") {
+    createOrderCheckout(event.data.object);
+  }
+
+  res.status(200).json({ received: true });
+};
 
 // CREATE ORDER
 exports.createOrder = catchAsyncErrors(async (req, res, next) => {
