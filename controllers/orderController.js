@@ -55,7 +55,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
     // },
-    metadeta: {
+    metadata: {
       shippingInfo,
       orderedItems,
     },
@@ -127,8 +127,8 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 // };
 const createOrderCheckout = async (session) => {
   // console.log(session);
-  const shippingInfo = session.metadeta.shippingInfo;
-  const orderedItems = session.metadeta.orderedItems;
+  const shippingInfo = session.metadata.shippingInfo;
+  const orderedItems = session.metadata.orderedItems;
 
   const paymentInfo = { sessionId: session.id, status: "completed" };
   const totalPrice = session.client_reference_id;
