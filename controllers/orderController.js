@@ -43,10 +43,10 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     mode: "payment", //mode of session
     payment_method_types: ["card"], //payment methods
     //---------------dev mod-------------------------------
-    success_url: `${process.env.FRONTEND_URL}/order/payment-success/pi_BkSw7WFuxtjr1RaUmjFUDtj`, //when payment is successfull browsesr goes to this url //
+    // success_url: `${process.env.FRONTEND_URL}/order/payment-success/pi_BkSw7WFuxtjr1RaUmjFUDtj`, //when payment is successfull browsesr goes to this url //
     //--------------------------------------------------------
     //----------------after deployment---------------------------------
-    // success_url: `${req.protocol}://${req.get('host')}/my-tours`,
+    success_url: `${process.env.FRONTEND_URL}/order/payment-success`, //when
     //--------------------------------------------------------
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
