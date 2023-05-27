@@ -33,6 +33,7 @@ const corsOptions = {
   origin: [
     "https://my-exams-ramkumargurav.vercel.app",
     "https://myblogs-ramkumargurav.vercel.app",
+    "https://royal-villas-ramkumargurav.vercel.app ",
     "http://localhost:3000",
   ],
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
@@ -125,8 +126,6 @@ app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 // // app.use(cookieParser());
 // // app.use(bodyParser.urlencoded({ extended: true }));
 // // app.use(fileUpload());
-
-
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
