@@ -32,12 +32,10 @@ const villaReservationSchema = new mongoose.Schema(
     },
     checkInDate: {
       type: Date,
-      min: Date.now(),
       required: [true, "Please Enter Check-in Date"],
     },
     checkOutDate: {
       type: Date,
-      min: Date.now(),
       required: [true, "Please Enter Check-Out Date"],
 
       validate: {
