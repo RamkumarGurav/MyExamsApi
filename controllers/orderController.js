@@ -52,7 +52,10 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
     client_reference_id: totalPrice, //productIDs is requiered to create booking in the data base
-    shipping: {
+    shipping_address_collection: {
+      allowed_countries: ["IN"], // Specify the allowed countries for shipping
+    },
+    shipping_details: {
       name: shippingInfo.name,
       address: {
         line1: shippingInfo.address,
@@ -131,6 +134,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 //   await Order.create({ tour, user, price });
 // };
 const createOrderCheckout = async (session) => {
+  console.log(session);
   console.log(session.line_items[0].price_data.product_data.name);
   console.log(session.line_items[0].price_data.product_data.product);
   const shippingInfo = {
