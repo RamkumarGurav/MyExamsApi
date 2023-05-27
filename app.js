@@ -25,6 +25,8 @@ const app = express();
 
 //
 
+app.enable("trust proxy");
+
 const corsOptions = {
   credentials: true, //all the credentials like cookies ,sessions are allowed
   // origin: true, // for public api //all the domains are allowed to call our api//
@@ -35,7 +37,7 @@ const corsOptions = {
   ],
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
   allowedHeaders:
-    "Access-Control-Allow-Headers, Origin,Accept,Authorization, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
+    "Access-Control-Allow-Headers,Access-Control-Allow-Origin, Origin,Accept,Authorization, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers",
 
   // //--------------------------------------------------------
   // origin: [
@@ -124,12 +126,7 @@ app.use(express.urlencoded({ extended: false, limit: "50mb" }));
 // // app.use(bodyParser.urlencoded({ extended: true }));
 // // app.use(fileUpload());
 
-// app.use(cookieParser()); // To parse the incoming cookies
-// const corsOptions = {
-//   credentials: true,
-//   origin: "http://localhost:3000", // Add your frontend origin here (Don't add '/' at the end)
-// };
-// app.use("*", cors(corsOptions)); // npm i cors
+
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev"));
@@ -143,7 +140,7 @@ if (process.env.NODE_ENV === "development") {
 app.get("/", (req, res) => {
   res.send("Welcome to Our API.");
 });
-app.get("/favicon.ico", (req, res) => res.status(200));//solving '/favicon.ico' error
+app.get("/favicon.ico", (req, res) => res.status(200)); //solving '/favicon.ico' error
 
 app.use("/api/v1", userRouter);
 app.use("/api/v1", questionRouter);

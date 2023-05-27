@@ -32,13 +32,14 @@ const villaReservationSchema = new mongoose.Schema(
     },
     checkInDate: {
       type: Date,
-      min: new Date(),
+      min: Date.now(),
       required: [true, "Please Enter Check-in Date"],
     },
     checkOutDate: {
       type: Date,
-      min: new Date(),
+      min: Date.now(),
       required: [true, "Please Enter Check-Out Date"],
+
       validate: {
         validator: function (checkOutDate) {
           // this only points to current doc on NEW document creation
