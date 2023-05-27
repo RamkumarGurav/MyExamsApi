@@ -135,8 +135,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 // };
 const createOrderCheckout = async (session) => {
   console.log(session);
-  console.log(session.line_items[0].price_data.product_data.name);
-  console.log(session.line_items[0].price_data.product_data.product);
   // const shippingInfo = {
   //   name: session.shipping_details.name,
   //   address: session.shipping_details.address.line1,
