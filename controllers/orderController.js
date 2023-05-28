@@ -30,12 +30,16 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   // console.log(records);
   // console.log(orderedItems);
   const orderedItems = records.map((rec, i) => {
+    const quantity = orderedItemsDetails.find(
+      (item) => item.productId == rec._doc._id
+    ).quantity;
+
     return {
       name: rec._doc.name,
       product: rec._doc._id,
       image: rec._doc.images[0].url,
       price: rec._doc.price,
-      quantity: orderedItemsDetails[i].quantity,
+      quantity,
     };
   });
 
