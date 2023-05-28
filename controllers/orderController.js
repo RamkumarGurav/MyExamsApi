@@ -112,9 +112,12 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  const session = await stripe.checkout.sessions.retrieve(sessionX.object.id, {
-    expand: ["line_items"],
-  });
+  const session = await stripe.checkout.sessions.retrieve(
+    `${sessionX.object.id}`,
+    {
+      expand: ["line_items"],
+    }
+  );
   const message = `Hi ${
     shippingInfo.name
   }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
@@ -192,7 +195,7 @@ exports.webhookCheckout = (req, res, next) => {
     createOrderCheckout(event.data.object);
   }
 
-  res.status(200).json({ received: true });
+  res.status(200).json({ received: true, session: event.data.object });
 };
 
 // CREATE ORDER
