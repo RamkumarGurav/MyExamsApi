@@ -136,45 +136,45 @@ const createOrderCheckout = async (sessionX) => {
   // );
 
   // console.log(session);
-  const shippingInfo = {
-    name: session.metadata.name,
-    address: session.metadata.address,
-    city: session.metadata.city,
-    state: session.metadata.state,
-    country: session.metadata.country,
-    phoneNo: session.metadata.phoneNo,
-    pinCode: session.metadata.pinCode,
-  };
+  // const shippingInfo = {
+  //   name: session.metadata.name,
+  //   address: session.metadata.address,
+  //   city: session.metadata.city,
+  //   state: session.metadata.state,
+  //   country: session.metadata.country,
+  //   phoneNo: session.metadata.phoneNo,
+  //   pinCode: session.metadata.pinCode,
+  // };
 
-  const paymentInfo = { sessionId: sessionX.id, status: "completed" };
-  const totalPrice = session.metadata.totalPrice;
-  const user = session.customer;
-  const orderedItems = session.line_items.map((item) => {
-    return {
-      name: item.price_data.product_data.name.split("--")[0],
-      product: item.price_data.product_data.name.split("--")[1],
+  // const paymentInfo = { sessionId: sessionX.id, status: "completed" };
+  // const totalPrice = session.metadata.totalPrice;
+  // const user = session.customer;
+  // const orderedItems = session.line_items.map((item) => {
+  //   return {
+  //     name: item.price_data.product_data.name.split("--")[0],
+  //     product: item.price_data.product_data.name.split("--")[1],
 
-      image: item.price_data.product_data.images[0],
-      price: item.price_data.unit_amount / 100,
-      quantity: item.quantity,
-    };
-  });
+  //     image: item.price_data.product_data.images[0],
+  //     price: item.price_data.unit_amount / 100,
+  //     quantity: item.quantity,
+  //   };
+  // });
 
   const order = await Order.create({
-    shippingInfo,
-    orderedItems,
-    paymentInfo,
-    totalPrice,
+    // shippingInfo,
+    // orderedItems,
+    // paymentInfo,
+    totalPrice:1,
     paidAt: Date.now(),
-    user: user,
+    // user: user,
   });
 
-  if (order) {
-    const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+  // if (order) {
+  //   const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
 
-    const user = { email: session.customer_email, name: shippingInfo.name };
-    await new Email(user, message).sendOrderPlacedMsg();
-  }
+  //   const user = { email: session.customer_email, name: shippingInfo.name };
+  //   await new Email(user, message).sendOrderPlacedMsg();
+  // }
 };
 
 exports.webhookCheckout = (req, res, next) => {
