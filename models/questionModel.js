@@ -6,27 +6,27 @@ const questionSchema = new mongoose.Schema(
       type: String,
       default: "gk",
     },
-    subjectK: {
-      type: String,
-      default: "gk",
-    },
-    topics: [String],
-    topicsK: [String],
+    // subjectK: {
+    //   type: String,
+    //   default: "gk",
+    // },
+    topics: String,
+    // topicsK: String,
     question: {
       type: String,
     },
-    questionK: {
-      type: String,
-    },
+    // questionK: {
+    //   type: String,
+    // },
     qImages: [String],
     answers: {
       type: [String],
       validate: [limitArray(4), "Cannot have more than 4 answers"],
     },
-    answersK: {
-      type: [String],
-      validate: [limitArray(4), "Cannot have more than 4 answers"],
-    },
+    // answersK: {
+    //   type: [String],
+    //   validate: [limitArray(4), "Cannot have more than 4 answers"],
+    // },
     answerIndex: Number,
     difficulty: {
       type: String,
