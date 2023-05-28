@@ -12,6 +12,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //------------Creating and sending Checkout Session---------------------------------------
 exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
+  
   //step1)Get the currently booked tour
   const {
     shippingInfo,
@@ -200,7 +201,7 @@ const createOrderCheckout = async (sessionX) => {
       paymentInfo,
       totalPrice,
       paidAt: Date.now(),
-      user: user,
+      user,
     });
     if (order) {
       const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
