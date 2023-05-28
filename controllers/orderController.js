@@ -88,10 +88,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     line_items: orderedItems.map((item) => {
       return {
         quantity: item.quantity,
-        metadata: {
-          productId: item.productId,
-          image: item.image,
-        },
+ 
         price_data: {
           currency: "inr",
           unit_amount: item.price * 100, //converting in rupee//1 rupee is 100paisa
