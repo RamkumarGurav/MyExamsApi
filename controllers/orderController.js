@@ -12,7 +12,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 //------------Creating and sending Checkout Session---------------------------------------
 exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
-  
   //step1)Get the currently booked tour
   const {
     shippingInfo,
@@ -184,6 +183,7 @@ const createOrderCheckout = async (sessionX) => {
     const paymentInfo = { sessionId: session.id, status: "completed" };
     const totalPrice = session.metadata.totalPrice;
     const user = session.client_reference_id;
+
     const orderedItems = session.line_items.data.map((item) => {
       return {
         name: item.description.split("--")[0],
