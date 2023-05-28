@@ -119,31 +119,26 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
+  //-----------------------testing---------------------------------
   // let message1 = `Hi ${
   //   sessionX.metadata.name
   // }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
   //   sessionX
   // )}\n\nIf you have not requested this email then Please ignore it`;
 
-  const userX = {
-    email: sessionX.customer_email,
-    name: sessionX.metadata.name,
-  };
+  // const userX = {
+  //   email: sessionX.customer_email,
+  //   name: sessionX.metadata.name,
+  // };
 
   // await new Email(userX, message1).sendOrderPlacedMsg();
+  //--------------------------------------------------------
 
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
     expand: ["line_items"],
   });
 
   if (session) {
-    let message2 = `Hi ${
-      sessionX.metadata.name
-    }\n\nCongradulations! this is retrieved session data,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-      session
-    )}\n\nIf you have not requested this email then Please ignore it`;
-
-    await new Email(userX, message2).sendOrderPlacedMsg();
     const shippingInfo = {
       name: session.metadata.name,
       address: session.metadata.address,
@@ -175,10 +170,10 @@ const createOrderCheckout = async (sessionX) => {
       user,
     });
     if (order) {
-      const message3 = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+      const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
 
-      const userY = { email: session.customer_email, name: shippingInfo.name };
-      await new Email(userY, message3).sendOrderPlacedMsg();
+      const user = { email: session.customer_email, name: shippingInfo.name };
+      await new Email(user, message).sendOrderPlacedMsg();
     }
   }
 };
