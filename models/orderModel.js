@@ -111,10 +111,10 @@ const orderSchema = new mongoose.Schema(
 );
 
 orderSchema.pre(/^find/, function (next) {
-  //--------------------------------------------------------
+  //---------------------populating innier elements of an  array of -----------------------------------
   // this.populate("user").populate("orderedItems.product"); //populating all the fields of user and product(in orderedItems)
   //--------------------------------------------------------
-  // this.populate("user").populate({   //populating selected fields 
+  // this.populate("user").populate({   //populating selected fields
   //   path: "orderedItems.product",
   //   select: "images",
   // });
