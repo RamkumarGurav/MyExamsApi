@@ -119,18 +119,18 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  let message1 = `Hi ${
-    sessionX.metadata.name
-  }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-    sessionX
-  )}\n\nIf you have not requested this email then Please ignore it`;
+  // let message1 = `Hi ${
+  //   sessionX.metadata.name
+  // }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
+  //   sessionX
+  // )}\n\nIf you have not requested this email then Please ignore it`;
 
   const userX = {
     email: sessionX.customer_email,
     name: sessionX.metadata.name,
   };
 
-  await new Email(userX, message1).sendOrderPlacedMsg();
+  // await new Email(userX, message1).sendOrderPlacedMsg();
 
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
     expand: ["line_items"],
@@ -184,7 +184,7 @@ const createOrderCheckout = async (sessionX) => {
   // }
 };
 
-exports.webhookCheckout = (req, res, next) => {
+exports.webhookCheckout = async (req, res, next) => {
   const signature = req.headers["stripe-signature"];
 
   let event;
@@ -199,7 +199,7 @@ exports.webhookCheckout = (req, res, next) => {
   }
 
   if (event.type === "checkout.session.completed") {
-    createOrderCheckout(event.data.object);
+    await createOrderCheckout(event.data.object);
   }
 
   res.status(200).json({ received: true, session: event.data.object });
