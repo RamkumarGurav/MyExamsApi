@@ -4,11 +4,11 @@ const questionSchema = new mongoose.Schema(
   {
     subject: {
       type: String,
-      default: "Gk",
+      default: "gk",
     },
     subjectK: {
       type: String,
-      default: "Gk",
+      default: "gk",
     },
     topics: [String],
     topicsK: [String],
@@ -36,10 +36,13 @@ const questionSchema = new mongoose.Schema(
     ansInfo: String,
     ansInfoK: String,
     appearedIn: String,
-    info:String,
+    info: String,
     tags: [String],
-    qSetId:String,
-    qSetIdNum:Number,
+    qSetId: {
+      type: String,
+      default: "no-id",
+    },
+    qSetIdNum: Number,
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -59,5 +62,3 @@ function limitArray(limit) {
 
 const Question = mongoose.model("Question", questionSchema);
 module.exports = Question;
-
-
