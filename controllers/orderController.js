@@ -4,7 +4,9 @@ const Product = require("../models/productModel");
 const Order = require("../models/orderModel");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
+const Email = require("../utils/Email");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+
 //--------------------------------------------------------
 //--------------------------------------------------------
 
@@ -119,12 +121,11 @@ const createOrderCheckout = async (sessionX) => {
   )}\n\nIf you have not requested this email then Please ignore it`;
 
   const userX = { email: sessionX.customer_email, name: shippingInfo.name };
-  await new Email(userX, message).sendOrderPlacedMsg()
+  await new Email(userX, message).sendOrderPlacedMsg();
 
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
     expand: ["line_items"],
   });
-;
   // let items;
   // stripe.checkout.sessions.listLineItems(
   //   session.id,
