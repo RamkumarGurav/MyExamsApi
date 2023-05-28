@@ -32,7 +32,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   const orderedItems = records.map((rec, i) => {
     return {
       name: rec._doc.name,
-      productId: rec._doc._id,
+      product: rec._doc._id,
       image: rec._doc.images[0].url,
       price: rec._doc.price,
       quantity: orderedItemsDetails[i].quantity,
@@ -88,12 +88,12 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     line_items: orderedItems.map((item) => {
       return {
         quantity: item.quantity,
- 
+
         price_data: {
           currency: "inr",
           unit_amount: item.price * 100, //converting in rupee//1 rupee is 100paisa
           product_data: {
-            name: `${item.name}--${item.productId}`,
+            name: `${item.name}--${item.product}`,
             images: [`${item.image}`],
           },
         },
