@@ -88,6 +88,10 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     line_items: orderedItems.map((item) => {
       return {
         quantity: item.quantity,
+        metadata: {
+          productId: item.productId,
+          image: item.image,
+        },
         price_data: {
           currency: "inr",
           unit_amount: item.price * 100, //converting in rupee//1 rupee is 100paisa
@@ -165,46 +169,45 @@ const createOrderCheckout = async (sessionX) => {
     await new Email(userX, message).sendOrderPlacedMsg();
   }
 
-  // console.log(session);
-  // const shippingInfo = {
-  //   name: session.metadata.name,
-  //   address: session.metadata.address,
-  //   city: session.metadata.city,
-  //   state: session.metadata.state,
-  //   country: session.metadata.country,
-  //   phoneNo: session.metadata.phoneNo,
-  //   pinCode: session.metadata.pinCode,
-  // };
+  if (session) {
+    const shippingInfo = {
+      name: session.metadata.name,
+      address: session.metadata.address,
+      city: session.metadata.city,
+      state: session.metadata.state,
+      country: session.metadata.country,
+      phoneNo: session.metadata.phoneNo,
+      pinCode: session.metadata.pinCode,
+    };
+    const paymentInfo = { sessionId: session.id, status: "completed" };
+    const totalPrice = session.metadata.totalPrice;
+    const user = session.customer;
+    const orderedItems = session.line_items.data.map((item) => {
+      return {
+        name: item.description.split("--")[0],
+        product: item.description.split("--")[1],
 
-  // const paymentInfo = { sessionId: sessionX.id, status: "completed" };
-  // const totalPrice = session.metadata.totalPrice;
-  // const user = session.customer;
-  // const orderedItems = session.line_items.map((item) => {
-  //   return {
-  //     name: item.price_data.product_data.name.split("--")[0],
-  //     product: item.price_data.product_data.name.split("--")[1],
+        // image: item.price_data.product_data.images[0],
+        price: item.price.unit_amount / 100,
+        quantity: item.quantity,
+      };
+    });
 
-  //     image: item.price_data.product_data.images[0],
-  //     price: item.price_data.unit_amount / 100,
-  //     quantity: item.quantity,
-  //   };
-  // });
+    const order = await Order.create({
+      shippingInfo,
+      orderedItems,
+      paymentInfo,
+      totalPrice,
+      paidAt: Date.now(),
+      user: user,
+    });
+    if (order) {
+      const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
 
-  const order = await Order.create({
-    // shippingInfo,
-    // orderedItems,
-    // paymentInfo,
-    totalPrice: 1,
-    paidAt: Date.now(),
-    // user: user,
-  });
-
-  // if (order) {
-  //   const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
-
-  //   const user = { email: session.customer_email, name: shippingInfo.name };
-  //   await new Email(user, message).sendOrderPlacedMsg();
-  // }
+      const user = { email: session.customer_email, name: shippingInfo.name };
+      await new Email(user, message).sendOrderPlacedMsg();
+    }
+  }
 };
 
 exports.webhookCheckout = (req, res, next) => {
