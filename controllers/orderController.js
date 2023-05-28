@@ -176,8 +176,8 @@ const createOrderCheckout = async (sessionX) => {
   if (order) {
     const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
 
-    const user = { email: session.customer_email, name: shippingInfo.name };
-    await new Email(user, message).sendOrderPlacedMsg();
+    const userY = { email: session.customer_email, name: shippingInfo.name };
+    await new Email(userY, message).sendOrderPlacedMsg();
   }
 };
 
