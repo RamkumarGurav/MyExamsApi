@@ -147,28 +147,6 @@ const createOrderCheckout = async (sessionX) => {
     };
     await new Email(userX, message).sendOrderPlacedMsg();
   }
-  // let items;
-  // stripe.checkout.sessions.listLineItems(
-  //   `${sessionX.id}`,
-  //   { limit: 20 },
-  //   function (err, lineItems) {
-  //     items = lineItems;
-  //   }
-  // );
-
-  // if (items) {
-  //   const message = `Hi ${
-  //     sessionX.metadata.name
-  //   }\n\nCongradulations! These are your order items,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-  //     items
-  //   )}\n\nIf you have not requested this email then Please ignore it`;
-
-  //   const userX = {
-  //     email: sessionX.customer_email,
-  //     name: sessionX.metadata.name,
-  //   };
-  //   await new Email(userX, message).sendOrderPlacedMsg();
-  // }
 
   if (session) {
     const shippingInfo = {
@@ -188,8 +166,6 @@ const createOrderCheckout = async (sessionX) => {
       return {
         name: item.description.split("--")[0],
         product: item.description.split("--")[1],
-
-        // image: item.price_data.product_data.images[0],
         price: item.price.unit_amount / 100,
         quantity: item.quantity,
       };
