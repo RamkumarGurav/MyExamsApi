@@ -143,7 +143,7 @@ const createOrderCheckout = async (sessionX) => {
     pinCode: session.metadata.pinCode,
   };
 
-  const paymentInfo = { sessionId: session.id, status: "completed" };
+  const paymentInfo = { sessionId: sessionX.Object.id, status: "completed" };
   const totalPrice = session.metadata.totalPrice;
   const user = session.customer;
   const orderedItems = session.line_items.map((item) => {
