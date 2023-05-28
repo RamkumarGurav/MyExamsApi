@@ -112,9 +112,17 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  const session = await stripe.checkout.sessions.retrieve(sessionX.id, {
+  const session = await stripe.checkout.sessions.retrieve(sessionX.object.id, {
     expand: ["line_items"],
   });
+  const message = `Hi ${
+    shippingInfo.name
+  }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
+    session
+  )}\n\nIf you have not requested this email then Please ignore it`;
+
+  const userX = { email: session.customer_email, name: shippingInfo.name };
+  await new Email(userX, message).sendOrderPlacedMsg();
   // let items;
   // stripe.checkout.sessions.listLineItems(
   //   session.id,
@@ -148,15 +156,6 @@ const createOrderCheckout = async (sessionX) => {
       quantity: item.quantity,
     };
   });
-
-  const message = `Hi ${
-    shippingInfo.name
-  }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-    session
-  )}\n\nIf you have not requested this email then Please ignore it`;
-
-  const userX = { email: session.customer_email, name: shippingInfo.name };
-  await new Email(userX, message).sendOrderPlacedMsg();
 
   const order = await Order.create({
     shippingInfo,
