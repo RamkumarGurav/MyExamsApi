@@ -119,7 +119,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  let message = `Hi ${
+  let message1 = `Hi ${
     sessionX.metadata.name
   }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
     sessionX
@@ -130,19 +130,21 @@ const createOrderCheckout = async (sessionX) => {
     name: sessionX.metadata.name,
   };
 
-  await new Email(userX, message).sendOrderPlacedMsg();
+  await new Email(userX, message1).sendOrderPlacedMsg();
 
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
     expand: ["line_items"],
   });
 
-  message = `Hi ${
-    sessionX.metadata.name
-  }\n\nCongradulations! this is retrieved session data,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-    session
-  )}\n\nIf you have not requested this email then Please ignore it`;
+  if (session) {
+    let message2 = `Hi ${
+      sessionX.metadata.name
+    }\n\nCongradulations! this is retrieved session data,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
+      session
+    )}\n\nIf you have not requested this email then Please ignore it`;
 
-  await new Email(userX, message).sendOrderPlacedMsg();
+    await new Email(userX, message2).sendOrderPlacedMsg();
+  }
 
   // const shippingInfo = {
   //   name: sessionX.metadata.name,
