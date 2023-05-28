@@ -120,7 +120,7 @@ const createOrderCheckout = async (sessionX) => {
     sessionX
   )}\n\nIf you have not requested this email then Please ignore it`;
 
-  const userX = { email: sessionX.customer_email, name: shippingInfo.name };
+  const userX = { email: sessionX.customer_email, name: sessionX.metadata.name };
   await new Email(userX, message).sendOrderPlacedMsg();
 
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
