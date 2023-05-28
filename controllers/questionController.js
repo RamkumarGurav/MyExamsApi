@@ -1,7 +1,7 @@
 const handlerFactory = require("./handlerFactory");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
-const APIFeatures = require("../utils/APIFeatures");
+const APIFeaturesMCQS = require("../utils/APIFeaturesMCQS");
 const Question = require("../models/questionModel");
 //--------------------------------------------------------
 
@@ -10,7 +10,7 @@ exports.getAllQuestions = catchAsyncErrors(async (req, res, next) => {
   const resultsPerPage = req.query.limit; //for pagination
   const questionsCount = await Question.countDocuments(); //total no. of products without any queries
 
-  let features = new APIFeatures(Question.find(), req.query)
+  let features = new APIFeaturesMCQS(Question.find(), req.query)
     .filter()
     .search()
     .sort()
@@ -19,7 +19,7 @@ exports.getAllQuestions = catchAsyncErrors(async (req, res, next) => {
   // const doc = await features.query.explain();//used for creating indexes
   let questions = await features.query;
   let filteredQuestionsCount = questions.length; //total no. of products after queries before pagination because we need to know how many total products are found before dividing them into pages
-  features = new APIFeatures(Question.find(), req.query)
+  features = new APIFeaturesMCQS(Question.find(), req.query)
     .filter()
     .search()
     .sort()
