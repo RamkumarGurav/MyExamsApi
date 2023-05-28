@@ -111,7 +111,19 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-const createOrderCheckout = async (session) => {
+const createOrderCheckout = async (sessionX) => {
+  const session = await stripe.checkout.sessions.retrieve(sessionX.id, {
+    expand: ["line_items"],
+  });
+  // let items;
+  // stripe.checkout.sessions.listLineItems(
+  //   session.id,
+  //   { limit: 20 },
+  //   function (err, lineItems) {
+  //     items = lineItems;
+  //   }
+  // );
+
   // console.log(session);
   const shippingInfo = {
     name: session.metadata.name,
