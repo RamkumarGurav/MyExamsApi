@@ -119,7 +119,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  const message = `Hi ${
+  let message = `Hi ${
     sessionX.metadata.name
   }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
     sessionX
@@ -134,57 +134,50 @@ const createOrderCheckout = async (sessionX) => {
   const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
     expand: ["line_items"],
   });
-  if (session) {
-    const message = `Hi ${
-      sessionX.metadata.name
-    }\n\nCongradulations! this is retrieved session data,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
-      session
-    )}\n\nIf you have not requested this email then Please ignore it`;
 
-    const userX = {
-      email: sessionX.customer_email,
-      name: sessionX.metadata.name,
+  message = `Hi ${
+    sessionX.metadata.name
+  }\n\nCongradulations! this is retrieved session data,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
+    session
+  )}\n\nIf you have not requested this email then Please ignore it`;
+
+  await new Email(userX, message).sendOrderPlacedMsg();
+
+  const shippingInfo = {
+    name: session.metadata.name,
+    address: session.metadata.address,
+    city: session.metadata.city,
+    state: session.metadata.state,
+    country: session.metadata.country,
+    phoneNo: session.metadata.phoneNo,
+    pinCode: session.metadata.pinCode,
+  };
+  const paymentInfo = { sessionId: session.id, status: "completed" };
+  const totalPrice = session.metadata.totalPrice;
+  const user = (await User.findOne({ email: session.customer_email })).id;
+
+  const orderedItems = session.line_items.data.map((item) => {
+    return {
+      name: item.description.split("--")[0],
+      product: item.description.split("--")[1],
+      price: item.price.unit_amount / 100,
+      quantity: item.quantity,
     };
-    await new Email(userX, message).sendOrderPlacedMsg();
-  }
+  });
 
-  if (session) {
-    const shippingInfo = {
-      name: session.metadata.name,
-      address: session.metadata.address,
-      city: session.metadata.city,
-      state: session.metadata.state,
-      country: session.metadata.country,
-      phoneNo: session.metadata.phoneNo,
-      pinCode: session.metadata.pinCode,
-    };
-    const paymentInfo = { sessionId: session.id, status: "completed" };
-    const totalPrice = session.metadata.totalPrice;
-    const user = await User.find({ email: session.customer_email });
+  const order = await Order.create({
+    shippingInfo,
+    orderedItems,
+    paymentInfo,
+    totalPrice,
+    paidAt: Date.now(),
+    user,
+  });
+  if (order) {
+    const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
 
-    const orderedItems = session.line_items.data.map((item) => {
-      return {
-        name: item.description.split("--")[0],
-        product: item.description.split("--")[1],
-        price: item.price.unit_amount / 100,
-        quantity: item.quantity,
-      };
-    });
-
-    const order = await Order.create({
-      shippingInfo,
-      orderedItems,
-      paymentInfo,
-      totalPrice,
-      paidAt: Date.now(),
-      user: user._id,
-    });
-    if (order) {
-      const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
-
-      const user = { email: session.customer_email, name: shippingInfo.name };
-      await new Email(user, message).sendOrderPlacedMsg();
-    }
+    const user = { email: session.customer_email, name: shippingInfo.name };
+    await new Email(user, message).sendOrderPlacedMsg();
   }
 };
 
