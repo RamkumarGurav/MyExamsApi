@@ -5,77 +5,77 @@ const orderSchema = new mongoose.Schema(
     shippingInfo: {
       name: {
         type: String,
-        required: true,
+        // required: true,
       },
       address: {
         type: String,
-        required: true,
+        // required: true,
       },
       country: {
         type: String,
-        required: true,
+        // required: true,
       },
       state: {
         type: String,
-        required: true,
+        // required: true,
       },
       city: {
         type: String,
-        required: true,
+        // required: true,
       },
       phoneNo: {
         type: Number,
-        required: true,
+        // required: true,
       },
       pinCode: {
         type: Number,
-        required: true,
+        // required: true,
       },
     },
     orderedItems: [
       {
         name: {
           type: String,
-          required: true,
+          // required: true,
         },
         product: {
           //product reference(ID)
           type: mongoose.Schema.ObjectId,
           ref: "Product",
-          required: true,
+          // required: true,
         },
         price: {
           type: Number,
-          required: true,
+          // required: true,
         },
         quantity: {
           type: Number,
-          required: true,
+          // required: true,
         },
         image: {
           type: String,
-          required: true,
+          // required: true,
         },
       },
     ],
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
     paymentInfo: {
       sessionId: {
         type: String,
-        required: true,
+        // required: true,
       },
       status: {
         type: String,
-        required: true,
+        // required: true,
       },
     },
     paidAt: {
       type: Date,
-      required: true,
+      // required: true,
     },
     // itemsPrice: {
     //   type: Number,
@@ -95,7 +95,7 @@ const orderSchema = new mongoose.Schema(
     },
     orderStatus: {
       type: String,
-      default: "processing",
+      // default: "processing",
     },
     deliveredAt: Date,
     cancelledAt: Date,

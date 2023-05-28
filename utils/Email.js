@@ -50,4 +50,7 @@ module.exports = class Email {
   async sendVillaReservationMsg() {
     await this.send(`Your Royal Villas Reservation is Successfull`);
   }
+  async sendOrderPlacedMsg() {
+    await this.send(`Thank You for Shopping at MyExams.com`);
+  }
 };

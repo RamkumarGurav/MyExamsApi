@@ -23,6 +23,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     // const product = await Product.findById(item.productId);
     return item.productId;
   });
+  const idsString = ids.join("--");
   const records = await Product.find().where("_id").in(ids).exec();
   // console.log(records);
   // console.log(orderedItems);
@@ -51,12 +52,13 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
-    client_reference_id: totalPrice, //productIDs is requiered to create booking in the data base
+    client_reference_id: idsString, //productID or Customer Email Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
     // },
     metadata: {
       ...shippingInfo,
+      totalPrice: totalPrice,
     },
 
     // shipping_options: [
@@ -109,12 +111,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
-// const createBookingCheckout = async (session) => {
-//   const tour = session.client_reference_id;
-//   const user = (await User.findOne({ email: session.customer_email })).id;
-//   const price = session.display_items[0].amount / 100;
-//   await Order.create({ tour, user, price });
-// };
 const createOrderCheckout = async (session) => {
   // console.log(session);
   const shippingInfo = {
@@ -128,7 +124,7 @@ const createOrderCheckout = async (session) => {
   };
 
   const paymentInfo = { sessionId: session.id, status: "completed" };
-  const totalPrice = session.client_reference_id;
+  const totalPrice = session.metadata.totalPrice;
   const user = session.customer;
   const orderedItems = session.line_items.map((item) => {
     return {
@@ -141,8 +137,6 @@ const createOrderCheckout = async (session) => {
     };
   });
 
-  // console.log(shippingInfo, orderedItems, paymentInfo, totalPrice,user);
-
   const order = await Order.create({
     shippingInfo,
     orderedItems,
@@ -151,6 +145,13 @@ const createOrderCheckout = async (session) => {
     paidAt: Date.now(),
     user: user,
   });
+
+  if (order) {
+    const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+
+    const user = { email: session.customer_email, name: shippingInfo.name };
+    await new Email(user, message).sendOrderPlacedMsg();
+  }
 };
 
 exports.webhookCheckout = (req, res, next) => {
