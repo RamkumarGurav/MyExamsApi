@@ -27,7 +27,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   });
   const idsString = ids.join("--");
   const records = await Product.find().where("_id").in(ids).exec();
-  const user=await User.find({email:req.user.email})
+
   // console.log(records);
   // console.log(orderedItems);
   const orderedItems = records.map((rec, i) => {
@@ -183,7 +183,7 @@ const createOrderCheckout = async (sessionX) => {
     };
     const paymentInfo = { sessionId: session.id, status: "completed" };
     const totalPrice = session.metadata.totalPrice;
-    const user = session.client_reference_id;
+    const user = await User.find({ email: req.user.email });
 
     const orderedItems = session.line_items.data.map((item) => {
       return {
@@ -202,7 +202,7 @@ const createOrderCheckout = async (sessionX) => {
       paymentInfo,
       totalPrice,
       paidAt: Date.now(),
-      user,
+      user: user._id,
     });
     if (order) {
       const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
