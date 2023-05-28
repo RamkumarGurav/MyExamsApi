@@ -54,7 +54,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
-    client_reference_id: idsString, //productID or Customer Email Id is requiered to create booking in the data base
+    client_reference_id: req.user._id, //productID or Customer  Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
     // },
@@ -178,7 +178,7 @@ const createOrderCheckout = async (sessionX) => {
     };
     const paymentInfo = { sessionId: session.id, status: "completed" };
     const totalPrice = session.metadata.totalPrice;
-    const user = session.customer;
+    const user = session.client_reference_id;
     const orderedItems = session.line_items.data.map((item) => {
       return {
         name: item.description.split("--")[0],
