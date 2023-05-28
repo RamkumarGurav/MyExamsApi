@@ -112,12 +112,9 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  const session = await stripe.checkout.sessions.retrieve(
-    `${sessionX.object.id}`,
-    {
-      expand: ["line_items"],
-    }
-  );
+  const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
+    expand: ["line_items"],
+  });
   const message = `Hi ${
     shippingInfo.name
   }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
@@ -146,7 +143,7 @@ const createOrderCheckout = async (sessionX) => {
     pinCode: session.metadata.pinCode,
   };
 
-  const paymentInfo = { sessionId: sessionX.Object.id, status: "completed" };
+  const paymentInfo = { sessionId: sessionX.id, status: "completed" };
   const totalPrice = session.metadata.totalPrice;
   const user = session.customer;
   const orderedItems = session.line_items.map((item) => {
