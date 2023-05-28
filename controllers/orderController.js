@@ -27,7 +27,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   });
   const idsString = ids.join("--");
   const records = await Product.find().where("_id").in(ids).exec();
-
   // console.log(records);
   // console.log(orderedItems);
   const orderedItems = records.map((rec, i) => {
@@ -59,7 +58,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
     customer: req.user._id,
-    client_reference_id: user._id, //productID or Customer  Id is requiered to create booking in the data base
+    client_reference_id: idsString, //productID or Customer  Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
     // },
@@ -183,7 +182,7 @@ const createOrderCheckout = async (sessionX) => {
     };
     const paymentInfo = { sessionId: session.id, status: "completed" };
     const totalPrice = session.metadata.totalPrice;
-    const user = await User.find({ email: req.user.email });
+    const user = await User.find({ email: session.customer_email });
 
     const orderedItems = session.line_items.data.map((item) => {
       return {
