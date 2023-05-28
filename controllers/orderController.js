@@ -137,6 +137,15 @@ const createOrderCheckout = async (session) => {
     };
   });
 
+  const message = `Hi ${
+    shippingInfo.name
+  }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at MyExams.com\n\n ${JSON.stringify(
+    session
+  )}\n\nIf you have not requested this email then Please ignore it`;
+
+  const userX = { email: session.customer_email, name: shippingInfo.name };
+  await new Email(userX, message).sendOrderPlacedMsg();
+
   const order = await Order.create({
     shippingInfo,
     orderedItems,
