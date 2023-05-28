@@ -144,44 +144,43 @@ const createOrderCheckout = async (sessionX) => {
     )}\n\nIf you have not requested this email then Please ignore it`;
 
     await new Email(userX, message2).sendOrderPlacedMsg();
+    const shippingInfo = {
+      name: session.metadata.name,
+      address: session.metadata.address,
+      city: session.metadata.city,
+      state: session.metadata.state,
+      country: session.metadata.country,
+      phoneNo: session.metadata.phoneNo,
+      pinCode: session.metadata.pinCode,
+    };
+    const paymentInfo = { sessionId: session.id, status: "completed" };
+    const totalPrice = session.metadata.totalPrice;
+    const user = (await User.findOne({ email: session.customer_email })).id;
+
+    const orderedItems = session.line_items.data.map((item) => {
+      return {
+        name: item.description.split("--")[0],
+        product: item.description.split("--")[1],
+        price: item.price.unit_amount / 100,
+        quantity: item.quantity,
+      };
+    });
+
+    const order = await Order.create({
+      shippingInfo,
+      orderedItems,
+      paymentInfo,
+      totalPrice,
+      paidAt: Date.now(),
+      user,
+    });
+    if (order) {
+      const message3 = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+
+      const userY = { email: session.customer_email, name: shippingInfo.name };
+      await new Email(userY, message3).sendOrderPlacedMsg();
+    }
   }
-
-  // const shippingInfo = {
-  //   name: sessionX.metadata.name,
-  //   address: sessionX.metadata.address,
-  //   city: sessionX.metadata.city,
-  //   state: sessionX.metadata.state,
-  //   country: sessionX.metadata.country,
-  //   phoneNo: sessionX.metadata.phoneNo,
-  //   pinCode: sessionX.metadata.pinCode,
-  // };
-  // const paymentInfo = { sessionId: sessionX.id, status: "completed" };
-  // const totalPrice = sessionX.metadata.totalPrice;
-  // const user = (await User.findOne({ email: sessionX.customer_email })).id;
-
-  // const orderedItems = session.line_items.data.map((item) => {
-  //   return {
-  //     name: item.description.split("--")[0],
-  //     product: item.description.split("--")[1],
-  //     price: item.price.unit_amount / 100,
-  //     quantity: item.quantity,
-  //   };
-  // });
-
-  // const order = await Order.create({
-  //   shippingInfo,
-  //   orderedItems,
-  //   paymentInfo,
-  //   totalPrice,
-  //   paidAt: Date.now(),
-  //   user,
-  // });
-  // if (order) {
-  //   const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n \n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
-
-  //   const userY = { email: session.customer_email, name: shippingInfo.name };
-  //   await new Email(userY, message).sendOrderPlacedMsg();
-  // }
 };
 
 exports.webhookCheckout = async (req, res, next) => {
