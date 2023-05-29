@@ -122,16 +122,6 @@ const createOrderCheckout = async (sessionX) => {
   //-------------for royal villa booking-------------------------------------------
   if (sessionX.client_reference_id === "royalVillas") {
     //-----------------------testing---------------------------------
-    let message1 = `Hi ${
-      sessionX.metadata.name
-    }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at RoyalVillas.com\n\n ${JSON.stringify(
-      sessionX
-    )}\n\nIf you have not requested this email then Please ignore it`;
-
-    const userX = {
-      email: sessionX.customer_email,
-      name: sessionX.metadata.name,
-    };
 
     await new Email(userX, message1).sendOrderPlacedMsg();
     const bookingInfo = {
@@ -154,7 +144,16 @@ const createOrderCheckout = async (sessionX) => {
       paymentInfo,
     });
     if (villaPackageBooking) {
-      const message = `Hi ${bookingInfo.name}\n\nCongradulations! Your Royal Package Booking is Successfull,\n Thank you for shopping at royalVillas.com\n\nIf you have not requested this email then Please ignore it`;
+      const message = `Hi ${bookingInfo.name}\n\nCongradulations! Your ${
+        bookingInfo.name.split("-")[2]
+      } Villa Package Booking is Successfull
+      \n price : ₹${bookingInfo.price}
+      \n rooms : ${bookingInfo.rooms}
+      \n staying days : ${bookingInfo.days}
+      \n Check-In Date : ${bookingInfo.checkInDate}
+      \n Check-OUt Date : ${bookingInfo.checkOutDate}
+      
+      \nThank you for choosing RoyalVillas.com\n\nIf you have not requested this email then Please ignore it`;
 
       const user = { email: bookingInfo.email, name: bookingInfo.name };
       return await new Email(user, message).sendRoyalVillasBookingMsg();
