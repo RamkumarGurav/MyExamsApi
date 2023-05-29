@@ -119,7 +119,11 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-  //-----------------------testing---------------------------------
+
+
+  //-------------for royal villa booking-------------------------------------------
+  if (sessionX.client_reference_id === "royalVillas") {
+      //-----------------------testing---------------------------------
   let message1 = `Hi ${
     sessionX.metadata.name
   }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at RoyalVillas.com\n\n ${JSON.stringify(
@@ -132,28 +136,20 @@ const createOrderCheckout = async (sessionX) => {
   };
 
   await new Email(userX, message1).sendOrderPlacedMsg();
-  //--------------------------------------------------------
-
-  const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
-    expand: ["line_items"],
-  });
-
-  //-------------for royal villa booking-------------------------------------------
-  if (session.client_reference_id === "royalVillas") {
     const bookingInfo = {
-      name: session.metadata.name,
-      email: session.metadata.email,
-      phone: session.metadata.phone,
-      packageName: session.metadata.packageName,
-      price: session.metadata.price,
-      rooms: session.metadata.rooms,
-      days: session.metadata.days,
-      checkInDate: session.metadata.checkInDate,
-      checkOutDate: session.metadata.checkOutDate,
+      name: sessionX.metadata.name,
+      email: sessionX.metadata.email,
+      phone: sessionX.metadata.phone,
+      packageName: sessionX.metadata.packageName,
+      price: sessionX.metadata.price,
+      rooms: sessionX.metadata.rooms,
+      days: sessionX.metadata.days,
+      checkInDate: sessionX.metadata.checkInDate,
+      checkOutDate: sessionX.metadata.checkOutDate,
       paidAt: Date.now(),
     };
 
-    const paymentInfo = { sessionId: session.id, status: "completed" };
+    const paymentInfo = { sessionId: sessionX.id, status: "completed" };
 
     const VillaPackageBooking = await Booking.create({
       ...bookingInfo,
@@ -167,6 +163,11 @@ const createOrderCheckout = async (sessionX) => {
     }
     //--------------------------------------------------------
   } else {
+    //--------------------------------------------------------
+
+    const session = await stripe.checkout.sessions.retrieve(`${sessionX.id}`, {
+      expand: ["line_items"],
+    });
     if (session) {
       const shippingInfo = {
         name: session.metadata.name,
