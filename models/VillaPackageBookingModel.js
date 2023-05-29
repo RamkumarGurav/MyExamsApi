@@ -57,10 +57,25 @@ const villaPackageBookingSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      min:[4999,'price must be minimum 4999 rupees'],
+      min: [4999, "price must be minimum 4999 rupees"],
       required: [true, "Please Enter Packange Price"],
     },
 
+
+    paymentInfo: {
+      sessionId: {
+        type: String,
+        // required: true,
+      },
+      status: {
+        type: String,
+        // required: true,
+      },
+    },
+    paidAt: {
+      type: Date,
+      // required: true,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),

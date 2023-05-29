@@ -53,4 +53,7 @@ module.exports = class Email {
   async sendOrderPlacedMsg() {
     await this.send(`Thank You for Shopping at MyExams.com`);
   }
+  async sendRoyalVillasBookingMsg() {
+    await this.send(`Congratulations ,Your Booking is Successfull`);
+  }
 };

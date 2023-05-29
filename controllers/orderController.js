@@ -2,6 +2,7 @@ const handlerFactory = require("./handlerFactory");
 const User = require("../models/userModel");
 const Product = require("../models/productModel");
 const Order = require("../models/orderModel");
+const VillaPackageBooking = require("../models/VillaPackageBookingModel");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
 const Email = require("../utils/Email");
@@ -57,7 +58,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     //--------------------------------------------------------
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: req.user.email, //need customer email in the reciept
-    customer: req.user._id,
+    customer: req.user._id, //sending req.user._id doesnt work u will get null value so send email and then find user
     client_reference_id: idsString, //productID or Customer  Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
@@ -138,42 +139,71 @@ const createOrderCheckout = async (sessionX) => {
     expand: ["line_items"],
   });
 
-  if (session) {
-    const shippingInfo = {
+  //-------------for royal villa booking-------------------------------------------
+  if (session.client_reference_id === "royalVillas") {
+    const bookingInfo = {
       name: session.metadata.name,
-      address: session.metadata.address,
-      city: session.metadata.city,
-      state: session.metadata.state,
-      country: session.metadata.country,
-      phoneNo: session.metadata.phoneNo,
-      pinCode: session.metadata.pinCode,
-    };
-    const paymentInfo = { sessionId: session.id, status: "completed" };
-    const totalPrice = session.metadata.totalPrice;
-    const user = (await User.findOne({ email: session.customer_email })).id;
-
-    const orderedItems = session.line_items.data.map((item) => {
-      return {
-        name: item.description.split("--")[0],
-        product: item.description.split("--")[1],
-        price: item.price.unit_amount / 100,
-        quantity: item.quantity,
-      };
-    });
-
-    const order = await Order.create({
-      shippingInfo,
-      orderedItems,
-      paymentInfo,
-      totalPrice,
+      email: session.metadata.email,
+      phone: session.metadata.phone,
+      packageName: session.metadata.packageName,
+      price: session.metadata.price,
+      rooms: session.metadata.rooms,
+      days: session.metadata.days,
+      checkInDate: session.metadata.checkInDate,
+      checkOutDate: session.metadata.checkOutDate,
       paidAt: Date.now(),
-      user,
-    });
-    if (order) {
-      const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+    };
 
-      const user = { email: session.customer_email, name: shippingInfo.name };
-      await new Email(user, message).sendOrderPlacedMsg();
+    const paymentInfo={sessionId:session.id,status:'completed'}
+
+    const VillaPackageBooking = await Booking.create({
+      ...bookingInfo,paymentInfo
+    });
+    if (VillaPackageBooking) {
+      const message = `Hi ${bookingInfo.name}\n\nCongradulations! Your Royal Package Booking is Successfull,\n Thank you for shopping at royalVillas.com\n\nIf you have not requested this email then Please ignore it`;
+
+      const user = { email: bookingInfo.email, name: bookingInfo.name };
+      return await new Email(user, message).sendRoyalVillasBookingMsg();
+    }
+    //--------------------------------------------------------
+  } else {
+    if (session) {
+      const shippingInfo = {
+        name: session.metadata.name,
+        address: session.metadata.address,
+        city: session.metadata.city,
+        state: session.metadata.state,
+        country: session.metadata.country,
+        phoneNo: session.metadata.phoneNo,
+        pinCode: session.metadata.pinCode,
+      };
+      const paymentInfo = { sessionId: session.id, status: "completed" };
+      const totalPrice = session.metadata.totalPrice;
+      const user = (await User.findOne({ email: session.customer_email })).id;
+
+      const orderedItems = session.line_items.data.map((item) => {
+        return {
+          name: item.description.split("--")[0],
+          product: item.description.split("--")[1],
+          price: item.price.unit_amount / 100,
+          quantity: item.quantity,
+        };
+      });
+
+      const order = await Order.create({
+        shippingInfo,
+        orderedItems,
+        paymentInfo,
+        totalPrice,
+        paidAt: Date.now(),
+        user,
+      });
+      if (order) {
+        const message = `Hi ${shippingInfo.name}\n\nCongradulations! Your Order is successfully Placed,\n Thank you for shopping at MyExams.com\n\nIf you have not requested this email then Please ignore it`;
+
+        const user = { email: session.customer_email, name: shippingInfo.name };
+        await new Email(user, message).sendOrderPlacedMsg();
+      }
     }
   }
 };
