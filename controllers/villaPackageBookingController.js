@@ -10,7 +10,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   const {
     name,
     email,
-    phoneNo,
+    phone,
     price,
     checkInDate,
     rooms,
@@ -59,7 +59,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     session,
-    paymentInfo: { sessionId: session.id, status: "completed" },
   });
 });
 
