@@ -76,6 +76,11 @@ const villaPackageBookingSchema = new mongoose.Schema(
       type: Date,
       // required: true,
     },
+    status: {
+      type: String,
+      default:'ongoing',
+      // required: true,
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
