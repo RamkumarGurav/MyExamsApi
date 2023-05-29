@@ -17,7 +17,11 @@ router
 
 router
   .route("/villa-package-bookings/:id")
-  .get(villaPackageBookingController.getVillaPackageBooking)
+  .get(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaPackageBookingController.getVillaPackageBooking
+  )
   .patch(
     authController.isRouteProtected,
     authController.restrictTo("admin"),

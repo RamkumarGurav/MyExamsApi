@@ -5,13 +5,29 @@ const router = express.Router();
 
 router
   .route("/villa-reservations")
-  .get(villaReservationController.getAllVillaReservations)
+  .get(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaReservationController.getAllVillaReservations
+  )
   .post(villaReservationController.createVillaReservation);
 
 router
   .route("/villa-reservations/:id")
-  .get(villaReservationController.getVillaReservation)
-  .patch(villaReservationController.updateVillaReservation)
-  .delete(villaReservationController.deleteVillaReservation);
+  .get(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaReservationController.getVillaReservation
+  )
+  .patch(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaReservationController.updateVillaReservation
+  )
+  .delete(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaReservationController.deleteVillaReservation
+  );
 
 module.exports = router;
