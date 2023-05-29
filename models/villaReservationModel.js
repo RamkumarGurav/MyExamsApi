@@ -41,7 +41,7 @@ const villaReservationSchema = new mongoose.Schema(
       validate: {
         validator: function (checkOutDate) {
           // this only points to current doc on NEW document creation
-          return checkOutDate > this.checkInDate;
+          return checkOutDate >= this.checkInDate;
         },
         message: "check-out should be greater than check-in date",
       },
