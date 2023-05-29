@@ -36,6 +36,8 @@ const corsOptions = {
     "https://myblogs-ramkumargurav.vercel.app",
     "https://royal-villas-ramkumargurav.vercel.app",
     "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:3002",
   ],
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
   allowedHeaders:
