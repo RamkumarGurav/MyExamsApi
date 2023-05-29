@@ -57,8 +57,7 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     success_url: `${process.env.FRONTEND_URL}/order/payment-success`, //when
     //--------------------------------------------------------
     cancel_url: `${process.env.FRONTEND_URL}/order/payment-cancelled`, //when payment is cancelled browsesr goes to this url
-    customer_email: req.user.email, //need customer email in the reciept
-    customer: req.user._id, //sending req.user._id doesnt work u will get null value so send email and then find user
+    customer_email: req.user.email, //need customer email in the reciept//sending req.user._id doesnt work u will get null value so send email and then find user
     client_reference_id: idsString, //productID or Customer  Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
@@ -154,10 +153,11 @@ const createOrderCheckout = async (sessionX) => {
       paidAt: Date.now(),
     };
 
-    const paymentInfo={sessionId:session.id,status:'completed'}
+    const paymentInfo = { sessionId: session.id, status: "completed" };
 
     const VillaPackageBooking = await Booking.create({
-      ...bookingInfo,paymentInfo
+      ...bookingInfo,
+      paymentInfo,
     });
     if (VillaPackageBooking) {
       const message = `Hi ${bookingInfo.name}\n\nCongradulations! Your Royal Package Booking is Successfull,\n Thank you for shopping at royalVillas.com\n\nIf you have not requested this email then Please ignore it`;

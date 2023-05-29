@@ -31,7 +31,6 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
     //--------------------------------------------------------
     cancel_url: `${process.env.FRONTEND_URL_RV}/buy-packages/payment-cancelled`, //when payment is cancelled browsesr goes to this url
     customer_email: email, //need customer email in the reciept
-    customer: name, //sending req.user._id doesnt work u will get null value so send email and then find user
     client_reference_id: "royalVillas", //productID or Customer  Id is requiered to create booking in the data base
     // shipping_address_collection: {
     //   allowed_countries: ["IN"], // Specify the allowed countries for shipping
