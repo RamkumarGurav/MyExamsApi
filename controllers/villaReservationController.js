@@ -94,7 +94,7 @@ exports.updateVillaReservation = catchAsyncErrors(async (req, res, next) => {
     req.body,
     {
       new: true, //it returns modified document rather than original
-      runValidators: true, //running validators again during update(because builtin validators only run automatically for create method)
+      runValidators: false, //running validators again during update(because builtin validators only run automatically for create method)
     }
   );
 
