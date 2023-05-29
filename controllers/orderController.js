@@ -119,23 +119,21 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
 });
 
 const createOrderCheckout = async (sessionX) => {
-
-
   //-------------for royal villa booking-------------------------------------------
   if (sessionX.client_reference_id === "royalVillas") {
-      //-----------------------testing---------------------------------
-  let message1 = `Hi ${
-    sessionX.metadata.name
-  }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at RoyalVillas.com\n\n ${JSON.stringify(
-    sessionX
-  )}\n\nIf you have not requested this email then Please ignore it`;
+    //-----------------------testing---------------------------------
+    let message1 = `Hi ${
+      sessionX.metadata.name
+    }\n\nCongradulations! Your Order is being Placed,\n \n Thank you for shopping at RoyalVillas.com\n\n ${JSON.stringify(
+      sessionX
+    )}\n\nIf you have not requested this email then Please ignore it`;
 
-  const userX = {
-    email: sessionX.customer_email,
-    name: sessionX.metadata.name,
-  };
+    const userX = {
+      email: sessionX.customer_email,
+      name: sessionX.metadata.name,
+    };
 
-  await new Email(userX, message1).sendOrderPlacedMsg();
+    await new Email(userX, message1).sendOrderPlacedMsg();
     const bookingInfo = {
       name: sessionX.metadata.name,
       email: sessionX.metadata.email,
@@ -151,11 +149,11 @@ const createOrderCheckout = async (sessionX) => {
 
     const paymentInfo = { sessionId: sessionX.id, status: "completed" };
 
-    const VillaPackageBooking = await Booking.create({
+    const villaPackageBooking = await VillaPackageBooking.create({
       ...bookingInfo,
       paymentInfo,
     });
-    if (VillaPackageBooking) {
+    if (villaPackageBooking) {
       const message = `Hi ${bookingInfo.name}\n\nCongradulations! Your Royal Package Booking is Successfull,\n Thank you for shopping at royalVillas.com\n\nIf you have not requested this email then Please ignore it`;
 
       const user = { email: bookingInfo.email, name: bookingInfo.name };
