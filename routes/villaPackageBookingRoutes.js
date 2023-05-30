@@ -5,7 +5,8 @@ const router = express.Router();
 
 router
   .route("/villa-package-bookings")
-  .get(villaPackageBookingController.getAllVillaPackageBookings
+  .get(authController.isRouteProtected,
+    authController.restrictTo("admin"),villaPackageBookingController.getAllVillaPackageBookings
   );
 
 router
