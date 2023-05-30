@@ -2,6 +2,7 @@ const handlerFactory = require("./handlerFactory");
 const User = require("../models/userModel");
 const VillaPackageBooking = require("../models/VillaPackageBookingModel");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
+const APIFeatures = require("../utils/APIFeatures");
 const AppError = require("../utils/AppError");
 const Email = require("../utils/Email");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
@@ -69,7 +70,7 @@ exports.getAllVillaPackageBookings = catchAsyncErrors(
     const villaPackageBookingsCount =
       await VillaPackageBooking.countDocuments(); //total no. of products without any queries
 
-    let features = new APIFeaturesMCQS(VillaPackageBooking.find(), req.query)
+    let features = new APIFeatures(VillaPackageBooking.find(), req.query)
       .filter()
       .search()
       .sort()
@@ -78,7 +79,7 @@ exports.getAllVillaPackageBookings = catchAsyncErrors(
     // const doc = await features.query.explain();//used for creating indexes
     let villaPackageBookings = await features.query;
     let filteredVillaPackageBookingsCount = villaPackageBookings.length; //total no. of products after queries before pagination because we need to know how many total products are found before dividing them into pages
-    features = new APIFeaturesMCQS(VillaPackageBooking.find(), req.query)
+    features = new APIFeatures(VillaPackageBooking.find(), req.query)
       .filter()
       .search()
       .sort()
