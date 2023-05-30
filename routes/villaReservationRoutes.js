@@ -19,7 +19,11 @@ router
     authController.restrictTo("admin"),
     villaReservationController.getVillaReservation
   )
-  .patch(villaReservationController.updateVillaReservation)
+  .patch(
+    authController.isRouteProtected,
+    authController.restrictTo("admin"),
+    villaReservationController.updateVillaReservation
+  )
   .delete(
     authController.isRouteProtected,
     authController.restrictTo("admin"),
