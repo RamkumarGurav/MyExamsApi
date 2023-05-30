@@ -48,8 +48,10 @@ exports.getCheckoutSession = catchAsyncErrors(async (req, res, next) => {
           currency: "inr",
           unit_amount: price * 100, //converting in rupee//1 rupee is 100paisa
           product_data: {
-            name: `${packageName}`,
-            // images: [`${item.image}`],
+            name: `${packageName.split("-")[2]} villa`,
+            images: [
+              `https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8dmlsbGF8ZW58MHx8MHx8fDA%3D&w=1000&q=80`,
+            ],
           },
         },
       },
