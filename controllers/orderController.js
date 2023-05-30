@@ -123,7 +123,6 @@ const createOrderCheckout = async (sessionX) => {
   if (sessionX.client_reference_id === "royalVillas") {
     //-----------------------testing---------------------------------
 
-    await new Email(userX, message1).sendOrderPlacedMsg();
     const bookingInfo = {
       name: sessionX.metadata.name,
       email: sessionX.metadata.email,
