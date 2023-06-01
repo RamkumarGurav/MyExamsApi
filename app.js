@@ -37,6 +37,7 @@ const corsOptions = {
     "https://my-exams-ramkumargurav.vercel.app",
     "https://myblogs-ramkumargurav.vercel.app",
     "https://royal-villas-ramkumargurav.vercel.app",
+    "https://portfolio-ramkumargurav.vercel.app",
     "http://localhost:3000",
     "http://localhost:3001",
     "http://localhost:3002",
