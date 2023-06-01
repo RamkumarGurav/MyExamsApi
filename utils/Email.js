@@ -56,4 +56,9 @@ module.exports = class Email {
   async sendRoyalVillasBookingMsg() {
     await this.send(`Congratulations ,Your Booking is Successfull`);
   }
+  async sendporfolioMessage() {
+    await this.send(`Ram you have a Message from Portfolio`);
+  }
+
+
 };

@@ -8,7 +8,7 @@ const Question = require("../models/questionModel");
 //-------------Get All Procuts--------------------------------
 exports.getAllQuestions = catchAsyncErrors(async (req, res, next) => {
   const resultsPerPage = req.query.limit; //for pagination
-  const questionsCount = await Question.countDocuments(); //total no. of products without any queries
+  const questionsCount = await Question.countDocuments(); //total no. of questions without any queries
 
   let features = new APIFeaturesMCQS(Question.find(), req.query)
     .filter()
@@ -18,7 +18,7 @@ exports.getAllQuestions = catchAsyncErrors(async (req, res, next) => {
 
   // const doc = await features.query.explain();//used for creating indexes
   let questions = await features.query;
-  let filteredQuestionsCount = questions.length; //total no. of products after queries before pagination because we need to know how many total products are found before dividing them into pages
+  let filteredQuestionsCount = questions.length; //total no. of questions after queries before pagination because we need to know how many total questions are found before dividing them into pages
   features = new APIFeaturesMCQS(Question.find(), req.query)
     .filter()
     .search()
@@ -48,7 +48,7 @@ exports.getAllQuestions = catchAsyncErrors(async (req, res, next) => {
 });
 //--------------------------------------------------------
 
-//------------Get a Product---------------------------------
+//------------Get a question---------------------------------
 exports.getQuestion = catchAsyncErrors(async (req, res, next) => {
   const question = await Question.findById(req.params.questionId);
 
@@ -68,9 +68,9 @@ exports.getQuestion = catchAsyncErrors(async (req, res, next) => {
 //--------------------------------------------------------
 
 //------------ADMINS ONLY---------------------------------
-//------------Create a Product-------------------------------
+//------------Create a question-------------------------------
 exports.createQuestion = catchAsyncErrors(async (req, res, next) => {
-  // req.body.user = req.user._id; //id of user/admin who will create this product
+  // req.body.user = req.user._id; //id of user/admin who will create this question
   const formData = req.body;
   const question = await Question.create(formData);
 
@@ -86,7 +86,7 @@ exports.createQuestion = catchAsyncErrors(async (req, res, next) => {
 
 //--------------------------------------------------------
 
-//------------Update a Product--------------------------------------
+//------------Update a question--------------------------------------
 exports.updateQuestion = catchAsyncErrors(async (req, res, next) => {
   const question = await Question.findByIdAndUpdate(
     req.params.questionId,
@@ -112,7 +112,7 @@ exports.updateQuestion = catchAsyncErrors(async (req, res, next) => {
 });
 //--------------------------------------------------------
 
-//-------------Delete a Product----------------------------
+//-------------Delete a question----------------------------
 exports.deleteQuestion = catchAsyncErrors(async (req, res, next) => {
   let question = await Question.findById(req.params.questionId);
   if (!question) {

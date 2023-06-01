@@ -20,6 +20,7 @@ const paymentRouter = require("./routes/paymentRoutes");
 const postRouter = require("./routes/postRoutes");
 const villaReservationRouter = require("./routes/villaReservationRoutes");
 const villaPackageBookingRouter = require("./routes/villaPackageBookingRoutes");
+const PortfolioMessageRouter = require("./routes/portfolioMessageRoutes");
 
 const app = express();
 
@@ -160,6 +161,7 @@ app.use("/api/v1", packageRouter);
 app.use("/api/v1", postRouter);
 app.use("/api/v1", villaReservationRouter);
 app.use("/api/v1", villaPackageBookingRouter);
+app.use("/api/v1", PortfolioMessageRouter);
 
 //-----HANDLING UNHANDLED ROUTES---------------------------
 app.use("*", (req, res, next) => {
