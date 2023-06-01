@@ -10,7 +10,7 @@ const portfolioMessagesSchema = new mongoose.Schema(
       maxlength: [50, "name must contain less than 50 characters"],
       minlength: [2, "name must contain more than 2 characters"],
     },
-      : {
+    email: {
       type: String,
       required: [true, "Please enter Your email"],
       trim: true,
