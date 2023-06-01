@@ -2,6 +2,7 @@ const handlerFactory = require("./handlerFactory");
 const catchAsyncErrors = require("../utils/catchAsyncErrors");
 const AppError = require("../utils/AppError");
 const APIFeaturesMCQS = require("../utils/APIFeaturesMCQS");
+const Email = require("../utils/Email");
 const PortfolioMessage = require("../models/portfolioMessageModel");
 //--------------------------------------------------------
 
