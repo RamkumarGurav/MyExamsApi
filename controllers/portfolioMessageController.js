@@ -13,12 +13,12 @@ exports.createPortfolioMessage = catchAsyncErrors(async (req, res, next) => {
   const formData = req.body;
   const portfolioMessage = await PortfolioMessage.create(formData);
 
-  const message = `Hi Ramkumar , ${portfolioMessage.name} sent you a message from portfolio\n name : ₹${portfolioMessage.name}
+  const message = `Hi Ramkumar , ${portfolioMessage.name} sent you a message from portfolio\n name : ${portfolioMessage.name}
   \n email : ${portfolioMessage.email}
   \n message : ${portfolioMessage.message}
 `;
 
-  const user = { email: "raamthecoder@gmail.com", name: "Ramkumar" };
+  const user = { email: "raamthecoder@gmail.com", name: portfolioMessage.name };
   await new Email(user, message).sendporfolioMessage();
 
   res.status(201).json({
