@@ -23,6 +23,10 @@ const portfolioMessagesSchema = new mongoose.Schema(
       maxlength: [1000, "message must contain less than 1000 characters"],
       minlength: [2, "message must contain more than 2 characters"],
     },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
   {
     toJSON: { virtuals: true },
