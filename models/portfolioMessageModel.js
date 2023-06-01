@@ -14,7 +14,6 @@ const portfolioMessagesSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please enter Your email"],
       trim: true,
-      unique: true,
       lowercase: true,
       validate: [validator.isEmail, "Please enter valid email"],
     },
